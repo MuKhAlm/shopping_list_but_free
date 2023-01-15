@@ -1,5 +1,12 @@
 # Requirements
 
+This document states the basic requirement for the **Shopping List But Free** application.
+
+## Target Platforms
+
+1. Android
+2. iOS
+
 ## All Screens
 
 * Display a menu button, that when pressed, display a [Navigation Drawer](#navigation-drawer).
