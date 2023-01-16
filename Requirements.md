@@ -30,6 +30,8 @@ This document states the basic requirement for the **Shopping List But Free** ap
 
 * Display **item name**.
 * Display whether **item** is **checked**.
+* Display **quantity**.
+* Allow **user** to increase or decrease quantity.
 * Display an **action list** that includes:
   * **Change Collection**: Display a **Collection Change Card** that:
     * changes the **collection** for which each **shopping item** with the same **name (NOT case sensitive)** belongs to.
