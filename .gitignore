@@ -32,6 +32,9 @@ migrate_working_dir/
 .pub/
 /build/
 
+# ObjectBox related
+/lib/objectbox.g.dart
+
 # Symbolication related
 app.*.symbols
 

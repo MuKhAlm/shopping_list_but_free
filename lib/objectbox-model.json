@@ -1,0 +1,101 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:3153903536479246543",
+      "lastPropertyId": "2:9007675811763459968",
+      "name": "Collection",
+      "properties": [
+        {
+          "id": "1:5076828565266143765",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:9007675811763459968",
+          "name": "name",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:3918751609485443210",
+      "lastPropertyId": "6:6229045387476390722",
+      "name": "ShoppingItem",
+      "properties": [
+        {
+          "id": "1:8982079017209994001",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3425802493250107925",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:1914611551266020001",
+          "name": "checked",
+          "type": 1
+        },
+        {
+          "id": "4:4873959619098610139",
+          "name": "quantity",
+          "type": 6
+        },
+        {
+          "id": "5:8942532551978171668",
+          "name": "shoppingListId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "1:6703445008571522427",
+          "relationTarget": "ShoppingList"
+        },
+        {
+          "id": "6:6229045387476390722",
+          "name": "collectionId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "2:8010051207238075402",
+          "relationTarget": "Collection"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:773777531865530866",
+      "lastPropertyId": "2:1692655917519953089",
+      "name": "ShoppingList",
+      "properties": [
+        {
+          "id": "1:3668525102430747519",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:1692655917519953089",
+          "name": "name",
+          "type": 9
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "3:773777531865530866",
+  "lastIndexId": "2:8010051207238075402",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [],
+  "retiredRelationUids": [],
+  "version": 1
+}
