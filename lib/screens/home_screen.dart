@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
-/// Display home screen
+/// A widget that displays the home screen
 class HomeScreen extends StatelessWidget {
+  /// Creates a home screen widget
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    List<String> _shoppingLists = [];
+    List<String> shoppingLists = [];
     for (var i = 1; i <= 20; i++) {
-      _shoppingLists.add('Shopping List $i');
+      shoppingLists.add('Shopping List $i');
     }
 
     return Scaffold(
@@ -24,7 +25,7 @@ class HomeScreen extends StatelessWidget {
                 ListTile(
                   onTap: () {},
                   title: Text(
-                    _shoppingLists[index],
+                    shoppingLists[index],
                   ),
                   trailing: IconButton(
                     tooltip: 'Remove Shopping List',
@@ -32,7 +33,7 @@ class HomeScreen extends StatelessWidget {
                     icon: const Icon(Icons.remove_circle_sharp),
                   ),
                 ),
-                if (index == _shoppingLists.length - 1)
+                if (index == shoppingLists.length - 1)
                   SizedBox(
                     height: MediaQuery.of(context).size.height / 5,
                   ),
@@ -40,7 +41,7 @@ class HomeScreen extends StatelessWidget {
             );
           }),
           separatorBuilder: ((context, index) => const Divider()),
-          itemCount: _shoppingLists.length,
+          itemCount: shoppingLists.length,
         ),
       ),
       floatingActionButton: FloatingActionButton(

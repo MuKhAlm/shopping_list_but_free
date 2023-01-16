@@ -16,6 +16,10 @@ class ShoppingItem {
   final ToOne<ShoppingList> shoppingList = ToOne<ShoppingList>();
   ToOne<Collection> collection = ToOne<Collection>();
 
+  /// Creates a shopping item entity,
+  ///
+  /// [quantity] must be greater than 0,
+  /// [id] must only be assigned by [ObjectBox]
   ShoppingItem({
     required this.name,
     this.checked = false,

@@ -11,6 +11,9 @@ class ShoppingList {
   @Backlink('shoppingList')
   final shoppingItems = ToMany<ShoppingItem>();
 
+  /// Creates a shopping list entity,
+  ///
+  /// [id] must only be assigned by[ObjectBox]
   ShoppingList({
     required this.name,
     this.id = 0,
