@@ -18,7 +18,6 @@ class ShoppingItem {
 
   ShoppingItem({
     required this.name,
-    required this.collection,
     this.checked = false,
     this.quantity = 1,
     this.id = 0,
