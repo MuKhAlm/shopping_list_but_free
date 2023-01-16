@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_list_but_free/models/shopping_list.dart';
 
 /// A widget that displays the home screen
 class HomeScreen extends StatelessWidget {
@@ -7,9 +8,9 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<String> shoppingLists = [];
+    List<ShoppingList> shoppingLists = [];
     for (var i = 1; i <= 20; i++) {
-      shoppingLists.add('Shopping List $i');
+      shoppingLists.add(ShoppingList(name: 'Shopping List $i'));
     }
 
     return Scaffold(
@@ -25,7 +26,7 @@ class HomeScreen extends StatelessWidget {
                 ListTile(
                   onTap: () {},
                   title: Text(
-                    shoppingLists[index],
+                    shoppingLists[index].name,
                   ),
                   trailing: IconButton(
                     tooltip: 'Remove Shopping List',
