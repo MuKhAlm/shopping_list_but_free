@@ -23,4 +23,4 @@ void main() {
   });
 }
 
-Widget getHomeScreen() => MaterialApp(home: const HomeScreen());
+Widget getHomeScreen() => const MaterialApp(home: HomeScreen());
