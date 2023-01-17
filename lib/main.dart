@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:shopping_list_but_free/objectbox.dart';
 import 'package:shopping_list_but_free/screens/home_screen.dart';
 
-late final ObjectBox objectbox;
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 

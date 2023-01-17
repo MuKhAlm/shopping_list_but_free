@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_list_but_free/main.dart' show objectbox;
 import 'package:shopping_list_but_free/models/shopping_list.dart';
+import 'package:shopping_list_but_free/objectbox.dart';
 
 /// A widget that displays the home screen
 class HomeScreen extends StatefulWidget {

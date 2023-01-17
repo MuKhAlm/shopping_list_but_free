@@ -6,6 +6,9 @@ import 'package:shopping_list_but_free/models/shopping_list.dart';
 
 import 'objectbox.g.dart';
 
+/// A link to ObjectBox database
+late final ObjectBox objectbox;
+
 /// A class that represents the application's database
 class ObjectBox {
   late final Store _store;
@@ -22,6 +25,8 @@ class ObjectBox {
 
     if (shoppingListBox.isEmpty()) {
       shoppingListBox.put(ShoppingList(name: 'Shopping List 1'));
+      shoppingListBox.put(ShoppingList(name: 'Shopping List 2'));
+      shoppingListBox.put(ShoppingList(name: 'Shopping List 3'));
     }
   }
 
