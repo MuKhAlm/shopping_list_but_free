@@ -70,7 +70,6 @@ void main() async {
 
           await tester.tap(find.byType(FloatingActionButton));
           await tester.pumpAndSettle();
-
           expect(find.byType(Form), findsOneWidget);
 
           await tester.enterText(
@@ -87,6 +86,24 @@ void main() async {
                   .find()
                   .length,
               1);
+        });
+
+        testWidgets(
+            'Remove shopping list addition form when the back icon is pressed',
+            (tester) async {
+          await setUp(tester, 3);
+
+          await tester.tap(find.byType(FloatingActionButton));
+          await tester.pumpAndSettle();
+          expect(find.byType(Form), findsOneWidget);
+
+          Finder backButton = find.byTooltip('Back');
+          expect(backButton, findsOneWidget);
+
+          await tester.tap(backButton);
+          await tester.pumpAndSettle();
+
+          expect(find.byType(Form), findsNothing);
         });
       });
     });
