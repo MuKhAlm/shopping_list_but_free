@@ -1,0 +1,13 @@
+libobjectbox.so:
+  >> Date: 2022-10-31 11:23:58
+  >> Size: 1879328
+  >> Section types: text, data, bss
+  >> Sizes by type: 1392481, 18800, 2272
+  >> Info: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, not stripped
+  >> Version found: 3.4.0-2022-10-31
+  >> 4931 internal symbols. C: 133 mdb, 34 Dart, 1368 GCC
+  >> 3216 internal C++ namespace symbols: 2724 objectbox, 124 std, 31 flatbuffers
+  >> 234 external symbols: 83 std namespace, 28 pthread
+  >> Exported C symbols: 383 obx, 40 obx_sync, 0 JNI, 0 lws, 0 mbedtls, 0 OPENSSL
+  >> 383 exported C++ namespace symbols: 0 objectbox, 382 std
+  >> SHA256: c0e14266a979e03e94fb96d827cdb2357c22c19fecb419b10906bd2265654489

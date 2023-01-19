@@ -8,15 +8,19 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomeScreen> createState() => HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  final Stream<List<ShoppingList>> _shoppingListsStream = objectbox
-      .shoppingListBox
-      .query()
-      .watch(triggerImmediately: true)
-      .map((query) => query.find());
+class HomeScreenState extends State<HomeScreen> {
+  late final Stream<List<ShoppingList>> _shoppingListsStream =
+      getShoppingListsStream();
+
+  getShoppingListsStream() {
+    return objectbox.shoppingListBox
+        .query()
+        .watch(triggerImmediately: true)
+        .map((query) => query.find());
+  }
 
   @override
   Widget build(BuildContext context) {
