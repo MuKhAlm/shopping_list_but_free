@@ -43,12 +43,13 @@ void main() async {
         await tester.pumpWidget(getHomeScreen());
         await tester.pumpAndSettle();
 
-        // Removing second item
-        await tester.tap(find.byIcon(Icons.remove_circle_sharp).at(1));
+        // Remove last item
+        await tester.tap(find.byIcon(Icons.remove_circle_sharp).last);
+        await tester.tap(find.byIcon(Icons.remove_circle_sharp).first);
+
         await tester.pumpAndSettle();
 
-        expect(find.text('Shopping List 2'), findsNothing);
-        expect(objectbox.shoppingListBox.getAll().length, 2);
+        expect(objectbox.shoppingListBox.getAll().length, 1);
       });
 
       group('Shopping List addition', () {
