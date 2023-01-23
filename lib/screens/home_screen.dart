@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list_but_free/models/shopping_list.dart';
 import 'package:shopping_list_but_free/objectbox.dart';
+import 'package:shopping_list_but_free/widgets/shopping_list_adding_card.dart';
 
 /// A widget that displays the home screen
 class HomeScreen extends StatefulWidget {
@@ -18,6 +19,8 @@ class HomeScreenState extends State<HomeScreen> {
       .watch(triggerImmediately: true)
       .map((query) => query.find());
 
+  bool _displayShoppingListAddingCard = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,47 +29,66 @@ class HomeScreenState extends State<HomeScreen> {
       ),
       drawer: const Drawer(),
       body: SafeArea(
-        child: StreamBuilder<List<ShoppingList>>(
-            stream: _shoppingListsStream,
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return const CircularProgressIndicator();
-              }
-              return ListView.separated(
-                itemBuilder: ((context, index) {
-                  return Column(
-                    children: [
-                      ListTile(
-                        onTap: () {},
-                        title: Text(
-                          snapshot.data![index].name,
+        child: Stack(
+          children: [
+            StreamBuilder<List<ShoppingList>>(
+              stream: _shoppingListsStream,
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const CircularProgressIndicator();
+                }
+                return ListView.separated(
+                  itemBuilder: ((context, index) {
+                    return Column(
+                      children: [
+                        ListTile(
+                          onTap: () {},
+                          title: Text(
+                            snapshot.data![index].name,
+                          ),
+                          trailing: IconButton(
+                            tooltip: 'Remove Shopping List',
+                            onPressed: () {
+                              objectbox.shoppingListBox
+                                  .remove(snapshot.data![index].id);
+                            },
+                            icon: const Icon(Icons.remove_circle_sharp),
+                          ),
                         ),
-                        trailing: IconButton(
-                          tooltip: 'Remove Shopping List',
-                          onPressed: () {
-                            objectbox.shoppingListBox
-                                .remove(snapshot.data![index].id);
-                          },
-                          icon: const Icon(Icons.remove_circle_sharp),
-                        ),
-                      ),
-                      if (index == snapshot.data!.length - 1)
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height / 5,
-                        ),
-                    ],
-                  );
-                }),
-                separatorBuilder: ((context, index) => const Divider()),
-                itemCount: snapshot.data!.length,
-              );
-            }),
+                        if (index == snapshot.data!.length - 1)
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height / 5,
+                          ),
+                      ],
+                    );
+                  }),
+                  separatorBuilder: ((context, index) => const Divider()),
+                  itemCount: snapshot.data!.length,
+                );
+              },
+            ),
+            if (_displayShoppingListAddingCard)
+              ShoppingListAddingCard(
+                onBack: () {
+                  setState(() {
+                    _displayShoppingListAddingCard = false;
+                  });
+                },
+              ),
+          ],
+        ),
       ),
-      floatingActionButton: FloatingActionButton(
-        tooltip: 'Add a new shopping list',
-        onPressed: () {},
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: (_displayShoppingListAddingCard)
+          ? null
+          : FloatingActionButton(
+              tooltip: 'Add a new shopping list',
+              onPressed: () {
+                setState(() {
+                  _displayShoppingListAddingCard = true;
+                });
+              },
+              child: const Icon(Icons.add),
+            ),
     );
   }
 }
