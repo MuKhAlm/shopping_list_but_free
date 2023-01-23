@@ -12,15 +12,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeScreenState extends State<HomeScreen> {
-  late final Stream<List<ShoppingList>> _shoppingListsStream =
-      getShoppingListsStream();
-
-  getShoppingListsStream() {
-    return objectbox.shoppingListBox
-        .query()
-        .watch(triggerImmediately: true)
-        .map((query) => query.find());
-  }
+  late final Stream<List<ShoppingList>> _shoppingListsStream = objectbox
+      .shoppingListBox
+      .query()
+      .watch(triggerImmediately: true)
+      .map((query) => query.find());
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +43,10 @@ class HomeScreenState extends State<HomeScreen> {
                         ),
                         trailing: IconButton(
                           tooltip: 'Remove Shopping List',
-                          onPressed: () {},
+                          onPressed: () {
+                            objectbox.shoppingListBox
+                                .remove(snapshot.data![index].id);
+                          },
                           icon: const Icon(Icons.remove_circle_sharp),
                         ),
                       ),
