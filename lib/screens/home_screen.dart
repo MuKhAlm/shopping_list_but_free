@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list_but_free/models/shopping_list.dart';
 import 'package:shopping_list_but_free/objectbox.dart';
+import 'package:shopping_list_but_free/screens/shopping_list_screen.dart';
 import 'package:shopping_list_but_free/widgets/shopping_list_adding_card.dart';
 
 /// A widget that displays the home screen
@@ -42,7 +43,15 @@ class HomeScreenState extends State<HomeScreen> {
                     return Column(
                       children: [
                         ListTile(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: ((context) => ShoppingListScreen(
+                                      shoppingList: snapshot.data![index],
+                                    )),
+                              ),
+                            );
+                          },
                           title: Text(
                             snapshot.data![index].name,
                           ),
