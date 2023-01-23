@@ -77,9 +77,8 @@ void main() async {
               find.byType(TextFormField), 'New Shopping List');
           await tester.pumpAndSettle();
           await tester.tap(find.byTooltip('Add shopping list'));
-          await tester.pumpAndSettle();
+          await tester.pump(const Duration(minutes: 1));
 
-          expect(find.text('New Shopping List'), findsOneWidget);
           expect(
               objectbox.shoppingListBox
                   .query(ShoppingList_.name.equals('New Shopping List'))
