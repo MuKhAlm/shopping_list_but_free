@@ -4,6 +4,7 @@ import 'package:shopping_list_but_free/models/shopping_list.dart';
 import 'package:shopping_list_but_free/objectbox.dart';
 import 'package:shopping_list_but_free/objectbox.g.dart';
 import 'package:shopping_list_but_free/screens/home_screen.dart';
+import 'package:shopping_list_but_free/screens/shopping_list_screen.dart';
 
 void main() async {
   objectbox = await ObjectBox.open();
@@ -105,6 +106,19 @@ void main() async {
 
           expect(find.byType(Form), findsNothing);
         });
+      });
+
+      testWidgets(
+          'Navigates to a shopping list screen when a shopping list is pressed',
+          (tester) async {
+        await setUp(tester, 1);
+
+        // Tap on shopping list
+        await tester.tap(find.text('Shopping List 1'));
+        await tester.pumpAndSettle();
+
+        // check if Shopping List Screen exists
+        expect(find.byType(ShoppingListScreen), findsOneWidget);
       });
     });
   });
