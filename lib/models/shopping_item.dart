@@ -1,5 +1,4 @@
 import 'package:objectbox/objectbox.dart';
-import 'package:shopping_list_but_free/models/collection.dart';
 import 'package:shopping_list_but_free/models/shopping_list.dart';
 
 /// Models a shopping item
@@ -14,7 +13,6 @@ class ShoppingItem {
   int quantity;
 
   final ToOne<ShoppingList> shoppingList = ToOne<ShoppingList>();
-  ToOne<Collection> collection = ToOne<Collection>();
 
   /// Creates a shopping item entity,
   ///

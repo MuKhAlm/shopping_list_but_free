@@ -55,14 +55,6 @@
           "flags": 520,
           "indexId": "1:6703445008571522427",
           "relationTarget": "ShoppingList"
-        },
-        {
-          "id": "6:6229045387476390722",
-          "name": "collectionId",
-          "type": 11,
-          "flags": 520,
-          "indexId": "2:8010051207238075402",
-          "relationTarget": "Collection"
         }
       ],
       "relations": []
@@ -94,8 +86,12 @@
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
-  "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredIndexUids": [
+    8010051207238075402
+  ],
+  "retiredPropertyUids": [
+    6229045387476390722
+  ],
   "retiredRelationUids": [],
   "version": 1
 }

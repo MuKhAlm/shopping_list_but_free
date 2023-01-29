@@ -8,8 +8,10 @@ class Collection {
   int id;
   String name;
 
-  @Backlink('collection')
-  List<ShoppingItem> shoppingItems = ToMany<ShoppingItem>();
+  /// Names of all corresponding [shoppingItems] **(Not case sensitive)**.
+  ///
+  /// All items **must** be **lower-case**.
+  Set<String> shoppingItemsNames = {};
 
   /// Creates an entity that works as a collection for [ShoppingItem]s by type.
   ///
