@@ -5,7 +5,7 @@ import 'package:shopping_list_but_free/screens/home_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Open ObjectBox databse
+  // Open ObjectBox database
   objectbox = await ObjectBox.open();
 
   runApp(const MyApp());
@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+      debugShowCheckedModeBanner: false,
       home: const HomeScreen(),
     );
   }
