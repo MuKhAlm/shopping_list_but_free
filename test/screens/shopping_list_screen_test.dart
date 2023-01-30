@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+import 'package:shopping_list_but_free/models/collection.dart';
 import 'package:shopping_list_but_free/models/shopping_item.dart';
 import 'package:shopping_list_but_free/models/shopping_list.dart';
 import 'package:shopping_list_but_free/objectbox.dart';
@@ -26,7 +27,7 @@ void main() async {
     populate();
   }
 
-  Widget _getShoppingListScreen() => MaterialApp(
+  Widget getShoppingListScreen() => MaterialApp(
         theme: ThemeData(useMaterial3: true),
         home: ShoppingListScreen(
           shoppingList: shoppingList,
@@ -50,7 +51,7 @@ void main() async {
               });
 
               // Pump ShoppingListScreen
-              await tester.pumpWidget(_getShoppingListScreen());
+              await tester.pumpWidget(getShoppingListScreen());
 
               // Test for correct title
               expect(find.text('Test Shopping List'), findsOneWidget);
@@ -68,7 +69,7 @@ void main() async {
               });
 
               // Pump ShoppingListScreen
-              await tester.pumpWidget(_getShoppingListScreen());
+              await tester.pumpWidget(getShoppingListScreen());
 
               // Test for correct title
               expect(find.byTooltip('Open navigation menu'), findsOneWidget);
@@ -91,7 +92,7 @@ void main() async {
                 });
 
                 // Pump ShoppingListScreen
-                await tester.pumpWidget(_getShoppingListScreen());
+                await tester.pumpWidget(getShoppingListScreen());
 
                 // Tap popup menu
                 await tester.tap(find.byTooltip('Show menu'));
@@ -109,7 +110,7 @@ void main() async {
                   });
 
                   // Pump ShoppingListScreen
-                  await tester.pumpWidget(_getShoppingListScreen());
+                  await tester.pumpWidget(getShoppingListScreen());
 
                   // Test for correct title
                   expect(find.byTooltip('Show menu'), findsOneWidget);
@@ -171,8 +172,109 @@ void main() async {
           );
         },
       );
+
+      group(
+        'Collection Panels',
+        () {
+          Future<void> collectionPanelsSetUp(
+            Collection collection,
+            WidgetTester tester,
+          ) async {
+            setUp(() {
+              // Collections
+              collection.shoppingItemsNames.addAll(
+                  <String>['test shopping item 1', 'test shopping item 2']);
+              objectbox.collectionBox.put(collection);
+              // Shopping Items
+              shoppingList.shoppingItems
+                  .add(ShoppingItem(name: 'Test Shopping Item 1'));
+              shoppingList.shoppingItems
+                  .add(ShoppingItem(name: 'Test Shopping Item 2'));
+              objectbox.shoppingListBox.put(shoppingList);
+            });
+
+            // Pump ShoppingListScreen
+            await tester.pumpWidget(getShoppingListScreen());
+            await tester.pumpAndSettle();
+          }
+
+          testWidgets(
+            'Displayed correctly',
+            (tester) async {
+              // Set shoppingList
+              shoppingList = ShoppingList(name: 'Test Shopping List');
+              Collection collection = Collection(name: 'Test Collection');
+
+              // Setup
+              await collectionPanelsSetUp(collection, tester);
+
+              // Test for collection
+              expect(find.text(collection.name), findsOneWidget);
+            },
+          );
+
+          testWidgets(
+            'Initially expanded',
+            (tester) async {
+              // Set shoppingList
+              shoppingList = ShoppingList(name: 'Test Shopping List');
+              Collection collection = Collection(name: 'Test Collection');
+
+              // Setup
+              await collectionPanelsSetUp(collection, tester);
+
+              // Test for presence of shopping item
+              expect(find.text('Test Shopping Item 1'), true);
+            },
+          );
+
+          testWidgets(
+            'Retracts correctly',
+            (tester) async {
+              // Set shoppingList
+              shoppingList = ShoppingList(name: 'Test Shopping List');
+              Collection collection = Collection(name: 'Test Collection');
+
+              // Setup
+              await collectionPanelsSetUp(collection, tester);
+
+              // Test for presence of shopping item
+              expect(find.text('Test Shopping Item 1'), true);
+
+              // Tap panel
+              await tester.tap(find.text(collection.name));
+              await tester.pumpAndSettle();
+
+              // Test for absence of shopping item
+              expect(find.text('Test Shopping Item 1'), false);
+            },
+          );
+        },
+      );
     },
   );
+}
+
+Future<void> collectionPanelsSetUp(
+    void setUp(Function populate),
+    Collection collection,
+    ShoppingList shoppingList,
+    WidgetTester tester,
+    Widget getShoppingListScreen()) async {
+  setUp(() {
+    // Collections
+    collection.shoppingItemsNames
+        .addAll(<String>['test shopping item 1', 'test shopping item 1']);
+    objectbox.collectionBox.put(collection);
+    // Shopping Items
+    shoppingList.shoppingItems.add(ShoppingItem(name: 'Test Shopping Item 1'));
+    shoppingList.shoppingItems.add(ShoppingItem(name: 'Test Shopping Item 2'));
+    objectbox.shoppingListBox.put(shoppingList);
+  });
+
+  // Pump ShoppingListScreen
+  await tester.pumpWidget(getShoppingListScreen());
+  await tester.pumpAndSettle();
 }
 
 class FakePathProviderPlatform extends Fake
