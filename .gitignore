@@ -34,6 +34,7 @@ migrate_working_dir/
 
 # ObjectBox related
 /lib/objectbox.g.dart
+/obx-db
 
 # Symbolication related
 app.*.symbols

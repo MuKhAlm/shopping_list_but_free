@@ -1,5 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
+import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:shopping_list_but_free/models/shopping_list.dart';
 import 'package:shopping_list_but_free/objectbox.dart';
 import 'package:shopping_list_but_free/objectbox.g.dart';
@@ -7,6 +9,8 @@ import 'package:shopping_list_but_free/screens/home_screen.dart';
 import 'package:shopping_list_but_free/screens/shopping_list_screen.dart';
 
 void main() async {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  PathProviderPlatform.instance = FakePathProviderPlatform();
   objectbox = await ObjectBox.open();
   group('HomeScreen', () {
     group('static', () {
@@ -146,4 +150,13 @@ Widget getHomeScreen() {
   return const MaterialApp(
     home: HomeScreen(),
   );
+}
+
+class FakePathProviderPlatform extends Fake
+    with MockPlatformInterfaceMixin
+    implements PathProviderPlatform {
+  @override
+  Future<String?> getApplicationDocumentsPath() async {
+    return '.';
+  }
 }
