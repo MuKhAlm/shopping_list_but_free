@@ -47,6 +47,24 @@ void main() async {
               expect(find.text('Test Shopping List'), findsOneWidget);
             },
           );
+
+          testWidgets(
+            'Display navigation menu',
+            (tester) async {
+              // Set shoppingList
+              shoppingList = ShoppingList(name: 'Test Shopping List');
+
+              setUp(() {
+                objectbox.shoppingListBox.put(shoppingList);
+              });
+
+              // Pump ShoppingListScreen
+              await tester.pumpWidget(_getShoppingListScreen(shoppingList));
+
+              // Test for correct title
+              expect(find.byTooltip('Open navigation menu'), findsOneWidget);
+            },
+          );
         },
       );
     },
