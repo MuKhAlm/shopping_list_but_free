@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:3153903536479246543",
-      "lastPropertyId": "2:9007675811763459968",
+      "lastPropertyId": "3:5989326772163998535",
       "name": "Collection",
       "properties": [
         {
@@ -18,6 +18,11 @@
           "id": "2:9007675811763459968",
           "name": "name",
           "type": 9
+        },
+        {
+          "id": "3:5989326772163998535",
+          "name": "shoppingItemsNames",
+          "type": 30
         }
       ],
       "relations": []

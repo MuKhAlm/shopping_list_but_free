@@ -11,7 +11,10 @@ class Collection {
   /// Names of all corresponding [shoppingItems] **(Not case sensitive)**.
   ///
   /// All items **must** be **lower-case**.
-  Set<String> shoppingItemsNames = {};
+  List<String> shoppingItemsNames = [];
+
+  @Transient()
+  bool expanded = true;
 
   /// Creates an entity that works as a collection for [ShoppingItem]s by type.
   ///

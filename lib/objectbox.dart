@@ -23,6 +23,16 @@ class ObjectBox {
     shoppingItemBox = Box<ShoppingItem>(_store);
     collectionBox = Box<Collection>(_store);
 
+    _addMockData();
+  }
+
+  void _addMockData() {
+    if (collectionBox.isEmpty()) {
+      collectionBox.put(Collection(name: 'Collection 1'));
+      collectionBox.put(Collection(name: 'Collection 2'));
+      collectionBox.put(Collection(name: 'Collection 3'));
+    }
+
     if (shoppingListBox.isEmpty()) {
       shoppingListBox.put(ShoppingList(name: 'Shopping List 1'));
       shoppingListBox.put(ShoppingList(name: 'Shopping List 2'));
