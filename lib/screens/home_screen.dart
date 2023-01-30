@@ -61,7 +61,9 @@ class HomeScreenState extends State<HomeScreen> {
                               objectbox.shoppingListBox
                                   .remove(snapshot.data![index].id);
                             },
-                            icon: const Icon(Icons.remove_circle_sharp),
+                            icon: const Icon(
+                              Icons.delete_forever_outlined,
+                            ),
                           ),
                         ),
                         if (index == snapshot.data!.length - 1)
