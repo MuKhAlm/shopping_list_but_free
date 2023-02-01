@@ -44,6 +44,8 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
           PopupMenuButton(
             onSelected: (value) {
               if (value == 'delete') {
+                // Pop route
+                Navigator.of(context).pop();
                 // Delete shopping items
                 if (_shoppingList.shoppingItems.isNotEmpty) {
                   for (var shoppingItem in _shoppingList.shoppingItems) {
@@ -52,8 +54,6 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                 }
                 // Delete shopping list
                 objectbox.shoppingListBox.remove(_shoppingList.id);
-                // Pop route
-                Navigator.of(context).pop();
               }
             },
             itemBuilder: (context) => [
@@ -89,13 +89,21 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
           return StreamBuilder(
             stream: _shoppingListStream,
             builder: (context, shoppingListSnapshot) {
+              // If there is no data
               if (!shoppingListSnapshot.hasData) {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
 
-              return Column(
+              // If ShoppingList has been deleted
+              if (shoppingListSnapshot.data!.isEmpty) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+
+              return ListView(
                 children: [
                   ExpansionPanelList(
                     expansionCallback: (panelIndex, isExpanded) {
@@ -105,7 +113,15 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                         _expanded[panelIndex] = !isExpanded;
                       });
                     },
+                    // Relevant collections
                     children: collectionsSnapshot.data!
+                        .where((Collection collection) => collection
+                            .shoppingItemsNames
+                            .any((String shoppingItemName) =>
+                                shoppingListSnapshot.data![0].shoppingItems
+                                    .map((ShoppingItem shoppingItem) =>
+                                        shoppingItem.name.toLowerCase())
+                                    .contains(shoppingItemName)))
                         .map(
                           (Collection collection) => ExpansionPanel(
                             canTapOnHeader: true,
@@ -116,7 +132,19 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                                 title: Text(collection.name),
                               );
                             },
-                            body: const Text('Shopping Items'),
+                            body: Column(
+                              // Relevant ShoppingItems for each Collection
+                              children: shoppingListSnapshot
+                                  .data![0].shoppingItems
+                                  .where((ShoppingItem shoppingItem) =>
+                                      collection.shoppingItemsNames.contains(
+                                          shoppingItem.name.toLowerCase()))
+                                  .map(
+                                    (ShoppingItem shoppingItem) =>
+                                        Text(shoppingItem.name),
+                                  )
+                                  .toList(),
+                            ),
                           ),
                         )
                         .toList(),

@@ -28,13 +28,22 @@ class ObjectBox {
 
   void _addMockData() {
     if (collectionBox.isEmpty()) {
-      collectionBox.put(Collection(name: 'Collection 1'));
-      collectionBox.put(Collection(name: 'Collection 2'));
+      Collection collection1 = Collection(name: 'Collection 1');
+      collection1.shoppingItemsNames.add('shopping item 1');
+      Collection collection2 = Collection(name: 'Collection 2');
+      collection2.shoppingItemsNames.add('shopping item 2');
+
+      collectionBox.put(collection1);
+      collectionBox.put(collection2);
       collectionBox.put(Collection(name: 'Collection 3'));
     }
 
     if (shoppingListBox.isEmpty()) {
-      shoppingListBox.put(ShoppingList(name: 'Shopping List 1'));
+      ShoppingList shoppingList = ShoppingList(name: 'Shopping List 1');
+      shoppingList.shoppingItems.add(ShoppingItem(name: 'Shopping Item 1'));
+      shoppingList.shoppingItems.add(ShoppingItem(name: 'Shopping Item 2'));
+
+      shoppingListBox.put(shoppingList);
       shoppingListBox.put(ShoppingList(name: 'Shopping List 2'));
       shoppingListBox.put(ShoppingList(name: 'Shopping List 3'));
     }
