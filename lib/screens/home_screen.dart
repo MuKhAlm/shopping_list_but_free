@@ -56,7 +56,7 @@ class HomeScreenState extends State<HomeScreen> {
                             snapshot.data![index].name,
                           ),
                           trailing: IconButton(
-                            tooltip: 'Remove Shopping List',
+                            tooltip: 'Remove shopping list',
                             onPressed: () {
                               objectbox.shoppingListBox
                                   .remove(snapshot.data![index].id);
