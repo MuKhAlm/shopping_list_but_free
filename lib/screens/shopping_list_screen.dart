@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:shopping_list_but_free/models/collection.dart';
 import 'package:shopping_list_but_free/models/shopping_item.dart';
 import 'package:shopping_list_but_free/models/shopping_list.dart';
@@ -39,7 +40,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.shoppingList.name),
+        title: Text(_shoppingList.name),
         actions: [
           PopupMenuButton(
             onSelected: (value) {
@@ -140,8 +141,26 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                                       collection.shoppingItemsNames.contains(
                                           shoppingItem.name.toLowerCase()))
                                   .map(
-                                    (ShoppingItem shoppingItem) =>
-                                        Text(shoppingItem.name),
+                                    (ShoppingItem shoppingItem) => ListTile(
+                                      leading: Checkbox(
+                                        onChanged: (value) {
+                                          toggleCheck(shoppingItem);
+                                        },
+                                        value: shoppingItem.checked,
+                                      ),
+                                      title: Text(
+                                        style: shoppingItem.checked
+                                            ? const TextStyle(
+                                                decoration:
+                                                    TextDecoration.lineThrough,
+                                              )
+                                            : null,
+                                        shoppingItem.name,
+                                      ),
+                                      onTap: () {
+                                        toggleCheck(shoppingItem);
+                                      },
+                                    ),
                                   )
                                   .toList(),
                             ),
@@ -156,5 +175,15 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
         },
       ),
     );
+  }
+
+  /// Checks or unchecks shoppingItems
+  void toggleCheck(ShoppingItem shoppingItem) {
+    // Allows ObjectBox to update shoppingItem with the same ID
+    shoppingItem.checked = !shoppingItem.checked;
+    objectbox.shoppingItemBox.put(shoppingItem);
+
+    // Forces StreamBuilder to rebuild since it depends on a ShoppingList Stream
+    objectbox.shoppingListBox.put(_shoppingList);
   }
 }

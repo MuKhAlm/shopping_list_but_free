@@ -27,6 +27,10 @@ class ObjectBox {
   }
 
   void _addMockData() {
+    // Empty collections
+    shoppingItemBox.removeAll();
+    shoppingListBox.removeAll();
+    collectionBox.removeAll();
     if (collectionBox.isEmpty()) {
       Collection collection1 = Collection(name: 'Collection 1');
       collection1.shoppingItemsNames.add('shopping item 1');
