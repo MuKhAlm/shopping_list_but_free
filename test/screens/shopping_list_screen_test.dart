@@ -199,7 +199,7 @@ void main() async {
           }
 
           testWidgets(
-            'Displayed correctly',
+            'Initially expanded and retracts correctly',
             (tester) async {
               // Set shoppingList
               shoppingList = ShoppingList(name: 'Test Shopping List');
@@ -208,73 +208,56 @@ void main() async {
               // Setup
               await collectionPanelsSetUp(collection, tester);
 
-              // Test for collection
-              expect(find.text(collection.name), findsOneWidget);
-            },
-          );
+              // Get ExpansionPanelList initial height
+              RenderBox box =
+                  tester.renderObject(find.byType(ExpansionPanelList));
+              final double oldHeight = box.size.height;
 
-          testWidgets(
-            'Initially expanded',
-            (tester) async {
-              // Set shoppingList
-              shoppingList = ShoppingList(name: 'Test Shopping List');
-              Collection collection = Collection(name: 'Test Collection');
-
-              // Setup
-              await collectionPanelsSetUp(collection, tester);
-
-              // Test for presence of shopping item
-              expect(find.text('Test Shopping Item 1'), true);
-            },
-          );
-
-          testWidgets(
-            'Retracts correctly',
-            (tester) async {
-              // Set shoppingList
-              shoppingList = ShoppingList(name: 'Test Shopping List');
-              Collection collection = Collection(name: 'Test Collection');
-
-              // Setup
-              await collectionPanelsSetUp(collection, tester);
-
-              // Test for presence of shopping item
-              expect(find.text('Test Shopping Item 1'), true);
-
-              // Tap panel
-              await tester.tap(find.text(collection.name));
+              // Tap first panel to retract it
+              await tester.tap(find.text('Test Collection'));
               await tester.pumpAndSettle();
 
-              // Test for absence of shopping item
-              expect(find.text('Test Shopping Item 1'), false);
+              // Expect ExpansionPanelList hight to be less
+              expect(box.size.height, lessThan(oldHeight));
+            },
+          );
+
+          testWidgets(
+            'Display only relevant collections',
+            (tester) async {
+              shoppingList = ShoppingList(name: 'Test Shopping List');
+              shoppingList.shoppingItems
+                  .add(ShoppingItem(name: 'Test Shopping Item 1'));
+              Collection collection1 = Collection(name: 'Test Collection 1');
+              Collection collection2 = Collection(name: 'Test Collection 2');
+              collection1.shoppingItemsNames.add('test shopping item 1');
+              collection2.shoppingItemsNames.add('test shopping item 2');
+
+              setUp(() {
+                objectbox.shoppingListBox.put(shoppingList);
+                objectbox.collectionBox.put(collection1);
+                objectbox.collectionBox.put(collection2);
+              });
+
+              await tester.pumpWidget(getShoppingListScreen());
+              await tester.pumpAndSettle();
+
+              // Test for presence of collection1 and absence of collection2
+              expect(find.text(collection1.name), findsOneWidget);
+              expect(find.text(collection2.name), findsNothing);
+            },
+          );
+
+          testWidgets(
+            'Display only relevant ShoppingItems for each Collection',
+            (tester) async {
+              // TODO: Implement (needs implementing collections removal first)
             },
           );
         },
       );
     },
   );
-}
-
-Future<void> collectionPanelsSetUp(
-    void setUp(Function populate),
-    Collection collection,
-    ShoppingList shoppingList,
-    WidgetTester tester,
-    Widget getShoppingListScreen()) async {
-  setUp(() {
-    // Collections
-    collection.shoppingItemsNames
-        .addAll(<String>['test shopping item 1', 'test shopping item 1']);
-    objectbox.collectionBox.put(collection);
-    // Shopping Items
-    shoppingList.shoppingItems.add(ShoppingItem(name: 'Test Shopping Item 1'));
-    shoppingList.shoppingItems.add(ShoppingItem(name: 'Test Shopping Item 2'));
-    objectbox.shoppingListBox.put(shoppingList);
-  });
-
-  // Pump ShoppingListScreen
-  await tester.pumpWidget(getShoppingListScreen());
-  await tester.pumpAndSettle();
 }
 
 class FakePathProviderPlatform extends Fake
