@@ -49,8 +49,8 @@ void main() async {
         await tester.pumpAndSettle();
 
         // Remove last item
-        await tester.tap(find.byIcon(Icons.remove_circle_sharp).last);
-        await tester.tap(find.byIcon(Icons.remove_circle_sharp).first);
+        await tester.tap(find.byTooltip('Remove shopping list').last);
+        await tester.tap(find.byTooltip('Remove shopping list').first);
 
         await tester.pumpAndSettle();
 
