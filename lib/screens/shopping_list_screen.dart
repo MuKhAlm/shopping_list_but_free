@@ -142,11 +142,15 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                                           shoppingItem.name.toLowerCase()))
                                   .map(
                                     (ShoppingItem shoppingItem) => ListTile(
-                                      leading: Checkbox(
-                                        onChanged: (value) {
-                                          toggleCheck(shoppingItem);
-                                        },
-                                        value: shoppingItem.checked,
+                                      leading: Tooltip(
+                                        message:
+                                            '${shoppingItem.checked ? 'Uncheck' : 'Check'} shopping item',
+                                        child: Checkbox(
+                                          onChanged: (value) {
+                                            toggleCheck(shoppingItem);
+                                          },
+                                          value: shoppingItem.checked,
+                                        ),
                                       ),
                                       title: Text(
                                         style: shoppingItem.checked

@@ -256,6 +256,136 @@ void main() async {
           );
         },
       );
+
+      group(
+        'Shopping item tile',
+        () {
+          testWidgets(
+            'Display initial checked initial status correctly',
+            (tester) async {
+              shoppingList = ShoppingList(name: 'Test Shopping List');
+              final ShoppingItem shoppingItem =
+                  ShoppingItem(name: 'Test Shopping Item');
+              shoppingList.shoppingItems.add(shoppingItem);
+
+              final Collection collection = Collection(name: 'Test Collection');
+              collection.shoppingItemsNames.add('test shopping item');
+
+              setUp(() {
+                objectbox.shoppingListBox.put(shoppingList);
+                objectbox.collectionBox.put(collection);
+              });
+
+              await tester.pumpWidget(getShoppingListScreen());
+              await tester.pumpAndSettle();
+
+              // Test by tooltips
+              expect(find.byTooltip('Check shopping item'), findsOneWidget);
+            },
+          );
+
+          testWidgets(
+            'Display initial unchecked initial status correctly',
+            (tester) async {
+              shoppingList = ShoppingList(name: 'Test Shopping List');
+              final ShoppingItem shoppingItem =
+                  ShoppingItem(name: 'Test Shopping Item');
+              shoppingItem.checked = true;
+              shoppingList.shoppingItems.add(shoppingItem);
+
+              final Collection collection = Collection(name: 'Test Collection');
+              collection.shoppingItemsNames.add('test shopping item');
+
+              setUp(() {
+                objectbox.shoppingListBox.put(shoppingList);
+                objectbox.collectionBox.put(collection);
+              });
+
+              await tester.pumpWidget(getShoppingListScreen());
+              await tester.pumpAndSettle();
+
+              // Test by tooltips
+              expect(find.byTooltip('Uncheck shopping item'), findsOneWidget);
+            },
+          );
+
+          testWidgets(
+            'Checks correctly',
+            (tester) async {
+              shoppingList = ShoppingList(name: 'Test Shopping List');
+              final ShoppingItem shoppingItem =
+                  ShoppingItem(name: 'Test Shopping Item');
+              shoppingList.shoppingItems.add(shoppingItem);
+
+              final Collection collection = Collection(name: 'Test Collection');
+              collection.shoppingItemsNames.add('test shopping item');
+
+              setUp(() {
+                objectbox.shoppingListBox.put(shoppingList);
+                objectbox.collectionBox.put(collection);
+              });
+
+              await tester.runAsync(() async {
+                await tester.pumpWidget(getShoppingListScreen());
+                await tester.pumpAndSettle();
+
+                // Test by tooltips
+                expect(find.byTooltip('Check shopping item'), findsOneWidget);
+
+                // Tap checkbox
+                await tester.tap(find.byTooltip('Check shopping item'));
+                await tester.pumpAndSettle();
+
+                await Future.delayed(const Duration(seconds: 1), () async {
+                  await tester.pumpAndSettle();
+
+                  // Test by tooltips
+                  expect(
+                      find.byTooltip('Uncheck shopping item'), findsOneWidget);
+                });
+              });
+            },
+          );
+
+          testWidgets(
+            'Unchecks correctly',
+            (tester) async {
+              shoppingList = ShoppingList(name: 'Test Shopping List');
+              final ShoppingItem shoppingItem =
+                  ShoppingItem(name: 'Test Shopping Item');
+              shoppingItem.checked = true;
+              shoppingList.shoppingItems.add(shoppingItem);
+
+              final Collection collection = Collection(name: 'Test Collection');
+              collection.shoppingItemsNames.add('test shopping item');
+
+              setUp(() {
+                objectbox.shoppingListBox.put(shoppingList);
+                objectbox.collectionBox.put(collection);
+              });
+
+              await tester.runAsync(() async {
+                await tester.pumpWidget(getShoppingListScreen());
+                await tester.pumpAndSettle();
+
+                // Test by tooltips
+                expect(find.byTooltip('Uncheck shopping item'), findsOneWidget);
+
+                // Tap checkbox
+                await tester.tap(find.byTooltip('Uncheck shopping item'));
+                await tester.pumpAndSettle();
+
+                await Future.delayed(const Duration(seconds: 1), () async {
+                  await tester.pumpAndSettle();
+
+                  // Test by tooltips
+                  expect(find.byTooltip('Check shopping item'), findsOneWidget);
+                });
+              });
+            },
+          );
+        },
+      );
     },
   );
 }
