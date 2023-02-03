@@ -170,9 +170,11 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                                           IconButton(
                                             onPressed: () {
                                               shoppingItem.quantity++;
-                                              objectbox.shoppingItemBox.put(shoppingItem);
+                                              objectbox.shoppingItemBox
+                                                  .put(shoppingItem);
 
-                                              objectbox.shoppingListBox.put(_shoppingList);
+                                              objectbox.shoppingListBox
+                                                  .put(_shoppingList);
                                             },
                                             icon: const Icon(Icons.add),
                                           ),
@@ -183,9 +185,11 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                                             onPressed: () {
                                               if (shoppingItem.quantity > 0) {
                                                 shoppingItem.quantity--;
-                                                objectbox.shoppingItemBox.put(shoppingItem);
+                                                objectbox.shoppingItemBox
+                                                    .put(shoppingItem);
 
-                                                objectbox.shoppingListBox.put(_shoppingList);
+                                                objectbox.shoppingListBox
+                                                    .put(_shoppingList);
                                               }
                                             },
                                             icon: const Icon(Icons.remove),
