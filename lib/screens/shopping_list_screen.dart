@@ -164,6 +164,34 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                                       onTap: () {
                                         toggleCheck(shoppingItem);
                                       },
+                                      trailing: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          IconButton(
+                                            onPressed: () {
+                                              shoppingItem.quantity++;
+                                              objectbox.shoppingItemBox.put(shoppingItem);
+
+                                              objectbox.shoppingListBox.put(_shoppingList);
+                                            },
+                                            icon: const Icon(Icons.add),
+                                          ),
+                                          Text(
+                                            shoppingItem.quantity.toString(),
+                                          ),
+                                          IconButton(
+                                            onPressed: () {
+                                              if (shoppingItem.quantity > 0) {
+                                                shoppingItem.quantity--;
+                                                objectbox.shoppingItemBox.put(shoppingItem);
+
+                                                objectbox.shoppingListBox.put(_shoppingList);
+                                              }
+                                            },
+                                            icon: const Icon(Icons.remove),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   )
                                   .toList(),
