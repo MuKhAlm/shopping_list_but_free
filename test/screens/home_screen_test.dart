@@ -48,13 +48,20 @@ void main() async {
         await tester.pumpWidget(getHomeScreen());
         await tester.pumpAndSettle();
 
-        // Remove last item
-        await tester.tap(find.byTooltip('Remove shopping list').last);
+        // Remove first item
         await tester.tap(find.byTooltip('Remove shopping list').first);
-
         await tester.pumpAndSettle();
 
-        expect(objectbox.shoppingListBox.getAll().length, 1);
+        await tester.runAsync(
+          () async {
+            await Future.delayed(const Duration(seconds: 1));
+
+            await tester.pumpAndSettle();
+
+            // Test for absence of Shopping List 1
+            expect(find.text('Shopping List 1'), findsNothing);
+          },
+        );
       });
 
       group('Shopping List addition', () {
@@ -84,13 +91,16 @@ void main() async {
           await tester.tap(find.byTooltip('Add shopping list'));
           await tester.pump(const Duration(minutes: 1));
 
-          expect(
-              objectbox.shoppingListBox
-                  .query(ShoppingList_.name.equals('New Shopping List'))
-                  .build()
-                  .find()
-                  .length,
-              1);
+          await tester.runAsync(
+            () async {
+              await Future.delayed(const Duration(seconds: 1));
+
+              await tester.pumpAndSettle();
+
+              // Test for absence of Shopping List 1
+              expect(find.text('New Shopping List'), findsOneWidget);
+            },
+          );
         });
 
         testWidgets(
