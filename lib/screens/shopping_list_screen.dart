@@ -207,6 +207,9 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                                                 objectbox.shoppingListBox.put(
                                                     shoppingListSnapshot
                                                         .data![0]);
+                                                // Remove shopping item form obx
+                                                objectbox.shoppingItemBox
+                                                    .remove(shoppingItem.id);
                                               }
                                             },
                                             itemBuilder: (context) => [
