@@ -217,7 +217,7 @@ void main() async {
               await tester.tap(find.text('Test Collection'));
               await tester.pumpAndSettle();
 
-              // Expect ExpansionPanelList hight to be less
+              // Expect ExpansionPanelList height to be less
               expect(box.size.height, lessThan(oldHeight));
             },
           );
