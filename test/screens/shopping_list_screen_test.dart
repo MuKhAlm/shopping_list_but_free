@@ -1,5 +1,5 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:shopping_list_but_free/models/collection.dart';
@@ -463,10 +463,10 @@ void main() async {
 
           testWidgets(
             'Decrease quantity',
-                (tester) async {
+            (tester) async {
               shoppingList = ShoppingList(name: 'Test Shopping List');
               final ShoppingItem shoppingItem =
-              ShoppingItem(name: 'Test Shopping Item');
+                  ShoppingItem(name: 'Test Shopping Item');
               shoppingList.shoppingItems.add(shoppingItem);
 
               final Collection collection = Collection(name: 'Test Collection');
@@ -489,7 +489,7 @@ void main() async {
 
               // Rebuild StreamBuilder
               await tester.runAsync(
-                    () async {
+                () async {
                   await Future.delayed(const Duration(seconds: 1));
 
                   await tester.pumpAndSettle();
@@ -505,7 +505,7 @@ void main() async {
 
               // Rebuild StreamBuilder
               await tester.runAsync(
-                    () async {
+                () async {
                   await Future.delayed(const Duration(seconds: 1));
 
                   await tester.pumpAndSettle();
@@ -518,11 +518,11 @@ void main() async {
           );
 
           testWidgets(
-            'Doesn\'t decrease quantity below 1' ,
-                (tester) async {
+            "Doesn't decrease quantity below 1",
+            (tester) async {
               shoppingList = ShoppingList(name: 'Test Shopping List');
               final ShoppingItem shoppingItem =
-              ShoppingItem(name: 'Test Shopping Item');
+                  ShoppingItem(name: 'Test Shopping Item');
               shoppingList.shoppingItems.add(shoppingItem);
 
               final Collection collection = Collection(name: 'Test Collection');
@@ -545,13 +545,186 @@ void main() async {
 
               // Rebuild StreamBuilder
               await tester.runAsync(
-                    () async {
+                () async {
                   await Future.delayed(const Duration(seconds: 1));
 
                   await tester.pumpAndSettle();
 
                   // Test for new quantity
                   expect(find.text('1'), findsOneWidget);
+                },
+              );
+            },
+          );
+
+          testWidgets(
+            'Display options menu',
+            (tester) async {
+              shoppingList = ShoppingList(name: 'Test Shopping List');
+              final ShoppingItem shoppingItem =
+                  ShoppingItem(name: 'Test Shopping Item');
+              shoppingList.shoppingItems.add(shoppingItem);
+
+              final Collection collection = Collection(name: 'Test Collection');
+              collection.shoppingItemsNames.add('test shopping item');
+
+              setUp(() {
+                objectbox.shoppingListBox.put(shoppingList);
+                objectbox.collectionBox.put(collection);
+              });
+
+              await tester.pumpWidget(getShoppingListScreen());
+              await tester.pumpAndSettle();
+
+              // Test for options menu
+              expect(find.byTooltip('Shopping item options'), findsOneWidget);
+            },
+          );
+
+          testWidgets(
+            'Display delete option in options menu',
+            (tester) async {
+              shoppingList = ShoppingList(name: 'Test Shopping List');
+              final ShoppingItem shoppingItem =
+                  ShoppingItem(name: 'Test Shopping Item');
+              shoppingList.shoppingItems.add(shoppingItem);
+
+              final Collection collection = Collection(name: 'Test Collection');
+              collection.shoppingItemsNames.add('test shopping item');
+
+              setUp(() {
+                objectbox.shoppingListBox.put(shoppingList);
+                objectbox.collectionBox.put(collection);
+              });
+
+              await tester.pumpWidget(getShoppingListScreen());
+              await tester.pumpAndSettle();
+
+              // Tap options menu
+              await tester.tap(find.byTooltip('Shopping item options'));
+              await tester.pumpAndSettle();
+
+              // Test for delete option
+              expect(find.text('Delete'), findsOneWidget);
+            },
+          );
+
+          testWidgets(
+            'Delete shopping item from screen when delete option is pressed in options menu',
+            (tester) async {
+              shoppingList = ShoppingList(name: 'Test Shopping List');
+              final ShoppingItem shoppingItem =
+                  ShoppingItem(name: 'Test Shopping Item');
+              shoppingList.shoppingItems.add(shoppingItem);
+
+              final Collection collection = Collection(name: 'Test Collection');
+              collection.shoppingItemsNames.add('test shopping item');
+
+              setUp(() {
+                objectbox.shoppingListBox.put(shoppingList);
+                objectbox.collectionBox.put(collection);
+              });
+
+              await tester.pumpWidget(getShoppingListScreen());
+              await tester.pumpAndSettle();
+
+              // Test for shopping item
+              expect(find.text(shoppingItem.name), findsOneWidget);
+
+              // Tap options menu
+              await tester.tap(find.byTooltip('Shopping item options'));
+              await tester.pumpAndSettle();
+
+              // Tap delete option
+              await tester.tap(find.text('Delete'));
+              await tester.pumpAndSettle();
+
+              await tester.runAsync(
+                () async {
+                  await Future.delayed(const Duration(seconds: 1));
+
+                  await tester.pumpAndSettle();
+
+                  // Test for shopping item
+                  expect(find.text(shoppingItem.name), findsNothing);
+                },
+              );
+            },
+          );
+
+          testWidgets(
+            'Delete shopping item from storage when delete option is pressed in options menu',
+            (tester) async {
+              shoppingList = ShoppingList(name: 'Test Shopping List');
+              final ShoppingItem shoppingItem =
+                  ShoppingItem(name: 'Test Shopping Item');
+              shoppingList.shoppingItems.add(shoppingItem);
+
+              final Collection collection = Collection(name: 'Test Collection');
+              collection.shoppingItemsNames.add('test shopping item');
+
+              setUp(() {
+                objectbox.shoppingListBox.put(shoppingList);
+                objectbox.collectionBox.put(collection);
+              });
+
+              await tester.pumpWidget(getShoppingListScreen());
+              await tester.pumpAndSettle();
+
+              // Test in storage
+              expect(objectbox.shoppingItemBox.getAll().length, 1);
+
+              // Tap options menu
+              await tester.tap(find.byTooltip('Shopping item options'));
+              await tester.pumpAndSettle();
+
+              // Tap delete option
+              await tester.tap(find.text('Delete'));
+              await tester.pumpAndSettle();
+
+              // Test in storage
+              expect(objectbox.shoppingItemBox.getAll().length, 0);
+            },
+          );
+
+          testWidgets(
+            'Remove collection from screen when delete option is pressed in options menu',
+            (tester) async {
+              shoppingList = ShoppingList(name: 'Test Shopping List');
+              final ShoppingItem shoppingItem =
+                  ShoppingItem(name: 'Test Shopping Item');
+              shoppingList.shoppingItems.add(shoppingItem);
+
+              final Collection collection = Collection(name: 'Test Collection');
+              collection.shoppingItemsNames.add('test shopping item');
+
+              setUp(() {
+                objectbox.shoppingListBox.put(shoppingList);
+                objectbox.collectionBox.put(collection);
+              });
+
+              await tester.pumpWidget(getShoppingListScreen());
+              await tester.pumpAndSettle();
+
+              // Test for collection
+              expect(find.text(collection.name), findsOneWidget);
+
+              // Tap options menu
+              await tester.tap(find.byTooltip('Shopping item options'));
+              await tester.pumpAndSettle();
+
+              // Tap delete option
+              await tester.tap(find.text('Delete'));
+              await tester.pumpAndSettle();
+
+              await tester.runAsync(
+                () async {
+                  await Future.delayed(const Duration(seconds: 1));
+
+                  await tester.pumpAndSettle();
+
+                  // Test for collection
+                  expect(find.text(collection.name), findsNothing);
                 },
               );
             },
