@@ -168,6 +168,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           IconButton(
+                                            tooltip: 'Increase quantity',
                                             onPressed: () {
                                               shoppingItem.quantity++;
                                               objectbox.shoppingItemBox
@@ -182,8 +183,9 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                                             shoppingItem.quantity.toString(),
                                           ),
                                           IconButton(
+                                            tooltip: 'Decrease quantity',
                                             onPressed: () {
-                                              if (shoppingItem.quantity > 0) {
+                                              if (shoppingItem.quantity > 1) {
                                                 shoppingItem.quantity--;
                                                 objectbox.shoppingItemBox
                                                     .put(shoppingItem);
