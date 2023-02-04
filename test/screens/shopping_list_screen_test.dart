@@ -325,25 +325,30 @@ void main() async {
                 objectbox.collectionBox.put(collection);
               });
 
-              await tester.runAsync(() async {
-                await tester.pumpWidget(getShoppingListScreen());
-                await tester.pumpAndSettle();
-
-                // Test by tooltips
-                expect(find.byTooltip('Check shopping item'), findsOneWidget);
-
-                // Tap checkbox
-                await tester.tap(find.byTooltip('Check shopping item'));
-                await tester.pumpAndSettle();
-
-                await Future.delayed(const Duration(seconds: 1), () async {
+              await tester.runAsync(
+                () async {
+                  await tester.pumpWidget(getShoppingListScreen());
                   await tester.pumpAndSettle();
 
                   // Test by tooltips
-                  expect(
-                      find.byTooltip('Uncheck shopping item'), findsOneWidget);
-                });
-              });
+                  expect(find.byTooltip('Check shopping item'), findsOneWidget);
+
+                  // Tap checkbox
+                  await tester.tap(find.byTooltip('Check shopping item'));
+                  await tester.pumpAndSettle();
+
+                  await Future.delayed(
+                    const Duration(seconds: 1),
+                    () async {
+                      await tester.pumpAndSettle();
+
+                      // Test by tooltips
+                      expect(find.byTooltip('Uncheck shopping item'),
+                          findsOneWidget);
+                    },
+                  );
+                },
+              );
             },
           );
 
@@ -364,24 +369,191 @@ void main() async {
                 objectbox.collectionBox.put(collection);
               });
 
-              await tester.runAsync(() async {
-                await tester.pumpWidget(getShoppingListScreen());
-                await tester.pumpAndSettle();
-
-                // Test by tooltips
-                expect(find.byTooltip('Uncheck shopping item'), findsOneWidget);
-
-                // Tap checkbox
-                await tester.tap(find.byTooltip('Uncheck shopping item'));
-                await tester.pumpAndSettle();
-
-                await Future.delayed(const Duration(seconds: 1), () async {
+              await tester.runAsync(
+                () async {
+                  await tester.pumpWidget(getShoppingListScreen());
                   await tester.pumpAndSettle();
 
                   // Test by tooltips
-                  expect(find.byTooltip('Check shopping item'), findsOneWidget);
-                });
+                  expect(
+                      find.byTooltip('Uncheck shopping item'), findsOneWidget);
+
+                  // Tap checkbox
+                  await tester.tap(find.byTooltip('Uncheck shopping item'));
+                  await tester.pumpAndSettle();
+
+                  await Future.delayed(
+                    const Duration(seconds: 1),
+                    () async {
+                      await tester.pumpAndSettle();
+
+                      // Test by tooltips
+                      expect(find.byTooltip('Check shopping item'),
+                          findsOneWidget);
+                    },
+                  );
+                },
+              );
+            },
+          );
+
+          testWidgets(
+            'Display initial quantity correctly',
+            (tester) async {
+              shoppingList = ShoppingList(name: 'Test Shopping List');
+              final ShoppingItem shoppingItem =
+                  ShoppingItem(name: 'Test Shopping Item');
+              shoppingList.shoppingItems.add(shoppingItem);
+
+              final Collection collection = Collection(name: 'Test Collection');
+              collection.shoppingItemsNames.add('test shopping item');
+
+              setUp(() {
+                objectbox.shoppingListBox.put(shoppingList);
+                objectbox.collectionBox.put(collection);
               });
+
+              await tester.pumpWidget(getShoppingListScreen());
+              await tester.pumpAndSettle();
+
+              // Test for quantity
+              expect(find.text('1'), findsOneWidget);
+            },
+          );
+
+          testWidgets(
+            'Increase quantity',
+            (tester) async {
+              shoppingList = ShoppingList(name: 'Test Shopping List');
+              final ShoppingItem shoppingItem =
+                  ShoppingItem(name: 'Test Shopping Item');
+              shoppingList.shoppingItems.add(shoppingItem);
+
+              final Collection collection = Collection(name: 'Test Collection');
+              collection.shoppingItemsNames.add('test shopping item');
+
+              setUp(() {
+                objectbox.shoppingListBox.put(shoppingList);
+                objectbox.collectionBox.put(collection);
+              });
+
+              await tester.pumpWidget(getShoppingListScreen());
+              await tester.pumpAndSettle();
+
+              // Test for initial quantity
+              expect(find.text('1'), findsOneWidget);
+
+              // Tap add button
+              await tester.tap(find.byTooltip('Increase quantity'));
+              await tester.pumpAndSettle();
+
+              // Rebuild StreamBuilder
+              await tester.runAsync(
+                () async {
+                  await Future.delayed(const Duration(seconds: 1));
+
+                  await tester.pumpAndSettle();
+
+                  // Test for new quantity
+                  expect(find.text('2'), findsOneWidget);
+                },
+              );
+            },
+          );
+
+          testWidgets(
+            'Decrease quantity',
+                (tester) async {
+              shoppingList = ShoppingList(name: 'Test Shopping List');
+              final ShoppingItem shoppingItem =
+              ShoppingItem(name: 'Test Shopping Item');
+              shoppingList.shoppingItems.add(shoppingItem);
+
+              final Collection collection = Collection(name: 'Test Collection');
+              collection.shoppingItemsNames.add('test shopping item');
+
+              setUp(() {
+                objectbox.shoppingListBox.put(shoppingList);
+                objectbox.collectionBox.put(collection);
+              });
+
+              await tester.pumpWidget(getShoppingListScreen());
+              await tester.pumpAndSettle();
+
+              // Test for initial quantity
+              expect(find.text('1'), findsOneWidget);
+
+              // Tap add button
+              await tester.tap(find.byTooltip('Increase quantity'));
+              await tester.pumpAndSettle();
+
+              // Rebuild StreamBuilder
+              await tester.runAsync(
+                    () async {
+                  await Future.delayed(const Duration(seconds: 1));
+
+                  await tester.pumpAndSettle();
+
+                  // Test for new quantity
+                  expect(find.text('2'), findsOneWidget);
+                },
+              );
+
+              //Tap dec button
+              await tester.tap(find.byTooltip('Decrease quantity'));
+              await tester.pumpAndSettle();
+
+              // Rebuild StreamBuilder
+              await tester.runAsync(
+                    () async {
+                  await Future.delayed(const Duration(seconds: 1));
+
+                  await tester.pumpAndSettle();
+
+                  // Test for new quantity
+                  expect(find.text('1'), findsOneWidget);
+                },
+              );
+            },
+          );
+
+          testWidgets(
+            'Doesn\'t decrease quantity below 1' ,
+                (tester) async {
+              shoppingList = ShoppingList(name: 'Test Shopping List');
+              final ShoppingItem shoppingItem =
+              ShoppingItem(name: 'Test Shopping Item');
+              shoppingList.shoppingItems.add(shoppingItem);
+
+              final Collection collection = Collection(name: 'Test Collection');
+              collection.shoppingItemsNames.add('test shopping item');
+
+              setUp(() {
+                objectbox.shoppingListBox.put(shoppingList);
+                objectbox.collectionBox.put(collection);
+              });
+
+              await tester.pumpWidget(getShoppingListScreen());
+              await tester.pumpAndSettle();
+
+              // Test for initial quantity
+              expect(find.text('1'), findsOneWidget);
+
+              // Tap dec button
+              await tester.tap(find.byTooltip('Decrease quantity'));
+              await tester.pumpAndSettle();
+
+              // Rebuild StreamBuilder
+              await tester.runAsync(
+                    () async {
+                  await Future.delayed(const Duration(seconds: 1));
+
+                  await tester.pumpAndSettle();
+
+                  // Test for new quantity
+                  expect(find.text('1'), findsOneWidget);
+                },
+              );
             },
           );
         },
