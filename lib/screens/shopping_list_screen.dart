@@ -195,6 +195,36 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                                             },
                                             icon: const Icon(Icons.remove),
                                           ),
+                                          PopupMenuButton(
+                                            tooltip: 'Shopping item options',
+                                            onSelected: (value) {
+                                              if (value == 'delete') {
+                                                // Remove shopping item from shopping list
+                                                shoppingListSnapshot
+                                                    .data![0].shoppingItems
+                                                    .remove(shoppingItem);
+                                                // Put new shopping list in obx
+                                                objectbox.shoppingListBox.put(
+                                                    shoppingListSnapshot
+                                                        .data![0]);
+                                              }
+                                            },
+                                            itemBuilder: (context) => [
+                                              PopupMenuItem(
+                                                value: 'delete',
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceAround,
+                                                  children: const [
+                                                    Icon(Icons
+                                                        .delete_forever_outlined),
+                                                    Text('Delete'),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ],
                                       ),
                                     ),
