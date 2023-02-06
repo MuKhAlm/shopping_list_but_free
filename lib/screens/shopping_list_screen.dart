@@ -214,15 +214,40 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                                             },
                                             itemBuilder: (context) => [
                                               PopupMenuItem(
+                                                value: 'change collection',
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: const [
+                                                    Icon(
+                                                      Icons.edit,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Text(
+                                                      'Change\nCollection',
+                                                      softWrap: true,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              PopupMenuItem(
                                                 value: 'delete',
                                                 child: Row(
                                                   mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceAround,
+                                                      MainAxisAlignment.start,
                                                   children: const [
-                                                    Icon(Icons
-                                                        .delete_forever_outlined),
-                                                    Text('Delete'),
+                                                    Icon(
+                                                      Icons
+                                                          .delete_forever_outlined,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Text(
+                                                      'Delete',
+                                                    ),
                                                   ],
                                                 ),
                                               ),
