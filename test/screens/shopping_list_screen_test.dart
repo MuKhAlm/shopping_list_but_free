@@ -7,6 +7,7 @@ import 'package:shopping_list_but_free/models/shopping_item.dart';
 import 'package:shopping_list_but_free/models/shopping_list.dart';
 import 'package:shopping_list_but_free/objectbox.dart';
 import 'package:shopping_list_but_free/screens/shopping_list_screen.dart';
+import 'package:shopping_list_but_free/widgets/change_collection.dart';
 
 void main() async {
   // Initialize objectbox
@@ -725,6 +726,49 @@ void main() async {
 
                   // Test for collection
                   expect(find.text(collection.name), findsNothing);
+                },
+              );
+            },
+          );
+
+          testWidgets(
+            'Push a ChangeCollection Widget when change collection option is pressed in options menu',
+            (tester) async {
+              shoppingList = ShoppingList(name: 'Test Shopping List');
+              final ShoppingItem shoppingItem =
+                  ShoppingItem(name: 'Test Shopping Item');
+              shoppingList.shoppingItems.add(shoppingItem);
+
+              final Collection collection = Collection(name: 'Test Collection');
+              collection.shoppingItemsNames.add('test shopping item');
+
+              setUp(() {
+                objectbox.shoppingListBox.put(shoppingList);
+                objectbox.collectionBox.put(collection);
+              });
+
+              await tester.pumpWidget(getShoppingListScreen());
+              await tester.pumpAndSettle();
+
+              // Test for collection
+              expect(find.text(collection.name), findsOneWidget);
+
+              // Tap options menu
+              await tester.tap(find.byTooltip('Shopping item options'));
+              await tester.pumpAndSettle();
+
+              // Tap change collection option
+              await tester.tap(find.text('Change\nCollection'));
+              await tester.pumpAndSettle();
+
+              await tester.runAsync(
+                () async {
+                  await Future.delayed(const Duration(seconds: 1));
+
+                  await tester.pumpAndSettle();
+
+                  // Test for ChangeCollection Widget
+                  expect(find.byType(ChangeCollection), findsOneWidget);
                 },
               );
             },
