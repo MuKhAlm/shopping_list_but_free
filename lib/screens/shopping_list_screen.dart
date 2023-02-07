@@ -4,6 +4,7 @@ import 'package:shopping_list_but_free/models/shopping_item.dart';
 import 'package:shopping_list_but_free/models/shopping_list.dart';
 import 'package:shopping_list_but_free/objectbox.dart';
 import 'package:shopping_list_but_free/objectbox.g.dart';
+import 'package:shopping_list_but_free/widgets/change_collection.dart';
 
 class ShoppingListScreen extends StatefulWidget {
   final ShoppingList shoppingList;
@@ -210,6 +211,23 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                                                 // Remove shopping item form obx
                                                 objectbox.shoppingItemBox
                                                     .remove(shoppingItem.id);
+                                              }
+
+                                              if (value ==
+                                                  'change collection') {
+                                                Navigator.of(context).push(
+                                                  PageRouteBuilder(
+                                                    opaque: false,
+                                                    barrierColor: Colors.black
+                                                        .withOpacity(0.5),
+                                                    barrierDismissible: true,
+                                                    pageBuilder: (_, __, ___) =>
+                                                        ChangeCollection(
+                                                      shoppingItem:
+                                                          shoppingItem,
+                                                    ),
+                                                  ),
+                                                );
                                               }
                                             },
                                             itemBuilder: (context) => [
