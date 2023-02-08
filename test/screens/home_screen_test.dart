@@ -6,113 +6,292 @@ import 'package:shopping_list_but_free/models/shopping_list.dart';
 import 'package:shopping_list_but_free/objectbox.dart';
 import 'package:shopping_list_but_free/screens/home_screen.dart';
 import 'package:shopping_list_but_free/screens/shopping_list_screen.dart';
+import 'package:shopping_list_but_free/widgets/add_shopping_list.dart';
 
 void main() async {
+  // Initialize objectbox
   TestWidgetsFlutterBinding.ensureInitialized();
   PathProviderPlatform.instance = FakePathProviderPlatform();
   objectbox = await ObjectBox.open();
-  group('HomeScreen', () {
-    group('static', () {
-      testWidgets('Display navigation menu', (tester) async {
-        await tester.pumpWidget(getHomeScreen());
-        expect(find.byTooltip('Open navigation menu'), findsOneWidget);
-      });
 
-      testWidgets('Dispaly shopping list adding button', (tester) async {
-        await tester.pumpWidget(getHomeScreen());
-        expect(find.byType(FloatingActionButton), findsOneWidget);
-      });
+  /// Empties database and populates it
+  void dbSetUp([Function? populate]) {
+    // Empty database
+    objectbox.shoppingListBox.removeAll();
+    objectbox.shoppingItemBox.removeAll();
+    objectbox.collectionBox.removeAll();
 
-      testWidgets('Display correct title', (tester) async {
-        // Empty obx
-        objectbox.shoppingListBox.removeAll();
-        // Add 20 ShoppingLists
-        for (var i = 1; i <= 20; i++) {
-          objectbox.shoppingListBox.put(ShoppingList(name: 'Shopping List $i'));
-        }
-        expect(objectbox.shoppingListBox.getAll().length, 20);
+    if (populate != null) {
+      // Populate database
+      populate();
+    }
+  }
 
-        await tester.pumpWidget(getHomeScreen());
-        expect(find.text('Shopping List But Free'), findsOneWidget);
-      });
-    });
+  Widget getHomeScreen() => MaterialApp(
+        theme: ThemeData(
+          useMaterial3: true,
+        ),
+        home: HomeScreen(),
+      );
 
-    group('Dynamic', () {
-      testWidgets('Remove shopping lists correctly', (tester) async {
-        // Setup
-        objectbox.shoppingListBox.removeAll();
-        expect(objectbox.shoppingListBox.getAll().length, 0);
-        addShoppingLists(objectbox, 3);
-        expect(objectbox.shoppingListBox.getAll().length, 3);
-        await tester.pumpWidget(getHomeScreen());
-        await tester.pumpAndSettle();
-
-        // Remove first item
-        await tester.tap(find.byTooltip('Remove shopping list').first);
-        await tester.pumpAndSettle();
-
-        await tester.runAsync(
-          () async {
-            await Future.delayed(const Duration(seconds: 1));
-
-            await tester.pumpAndSettle();
-
-            // Test for absence of Shopping List 1
-            expect(find.text('Shopping List 1'), findsNothing);
-          },
-        );
-      });
-
-      group('Shopping List addition', () {
-        testWidgets(
-            'Display shopping list addition card when floating action button is pressed',
+  group(
+    'HomeScreen',
+    () {
+      group(
+        'AppBar',
+        () {
+          testWidgets(
+            'Displays nav menu',
             (tester) async {
-          await setUp(tester, 1);
+              // Setup
+              dbSetUp();
 
+              await tester.pumpWidget(getHomeScreen());
+              await tester.pumpAndSettle();
+
+              // Test for nav menu
+              expect(find.byTooltip('Open navigation menu'), findsOneWidget);
+            },
+          );
+
+          testWidgets(
+            'Display title',
+            (tester) async {
+              // Setup
+              dbSetUp();
+
+              await tester.pumpWidget(getHomeScreen());
+              await tester.pumpAndSettle();
+
+              // Test for title
+              expect(find.text('Shopping List But Free'), findsOneWidget);
+            },
+          );
+        },
+      );
+
+      group(
+        'Shopping lists',
+        () {
+          testWidgets(
+            'Names displayed',
+            (tester) async {
+              // Setup
+              final ShoppingList testShoppingList1 =
+                  ShoppingList(name: 'Test Shopping List 1');
+              final ShoppingList testShoppingList2 =
+                  ShoppingList(name: 'Test Shopping List 2');
+              final ShoppingList testShoppingList3 =
+                  ShoppingList(name: 'Test Shopping List 3');
+
+              dbSetUp(() {
+                objectbox.shoppingListBox.putMany(
+                    [testShoppingList1, testShoppingList2, testShoppingList3]);
+              });
+
+              await tester.pumpWidget(getHomeScreen());
+              await tester.pumpAndSettle();
+
+              // Test for shopping lists
+              expect(find.text(testShoppingList1.name), findsOneWidget);
+              expect(find.text(testShoppingList2.name), findsOneWidget);
+              expect(find.text(testShoppingList3.name), findsOneWidget);
+            },
+          );
+
+          testWidgets(
+            'Can be removed from screen',
+            (tester) async {
+              // Setup
+              final ShoppingList testShoppingList1 =
+                  ShoppingList(name: 'Test Shopping List 1');
+              final ShoppingList testShoppingList2 =
+                  ShoppingList(name: 'Test Shopping List 2');
+              final ShoppingList testShoppingList3 =
+                  ShoppingList(name: 'Test Shopping List 3');
+
+              dbSetUp(() {
+                objectbox.shoppingListBox.putMany(
+                    [testShoppingList1, testShoppingList2, testShoppingList3]);
+              });
+
+              await tester.pumpWidget(getHomeScreen());
+              await tester.pumpAndSettle();
+
+              // Test for shopping lists
+              expect(find.text(testShoppingList1.name), findsOneWidget);
+              expect(find.text(testShoppingList2.name), findsOneWidget);
+              expect(find.text(testShoppingList3.name), findsOneWidget);
+
+              // Remove second and first shopping lists
+              await tester.tap(find.byTooltip('Remove shopping list').at(1));
+              await tester.pumpAndSettle();
+              await tester.tap(find.byTooltip('Remove shopping list').first);
+              await tester.pumpAndSettle();
+
+              await tester.runAsync(
+                () async {
+                  // Advance time for StreamBuilder to rebuild
+                  await Future.delayed(const Duration(microseconds: 500));
+
+                  await tester.pumpAndSettle();
+
+                  // Test for shopping lists
+                  expect(find.text(testShoppingList1.name), findsNothing);
+                  expect(find.text(testShoppingList2.name), findsNothing);
+                  expect(find.text(testShoppingList3.name), findsOneWidget);
+                },
+              );
+            },
+          );
+
+          testWidgets(
+            'Can be removed from db',
+            (tester) async {
+              // Setup
+              final ShoppingList testShoppingList1 =
+                  ShoppingList(name: 'Test Shopping List 1');
+              final ShoppingList testShoppingList2 =
+                  ShoppingList(name: 'Test Shopping List 2');
+              final ShoppingList testShoppingList3 =
+                  ShoppingList(name: 'Test Shopping List 3');
+
+              dbSetUp(() {
+                objectbox.shoppingListBox.putMany(
+                    [testShoppingList1, testShoppingList2, testShoppingList3]);
+              });
+
+              await tester.pumpWidget(getHomeScreen());
+              await tester.pumpAndSettle();
+
+              // Test for shopping lists
+              expect(find.text(testShoppingList1.name), findsOneWidget);
+              expect(find.text(testShoppingList2.name), findsOneWidget);
+              expect(find.text(testShoppingList3.name), findsOneWidget);
+
+              // Remove second and first shopping lists
+              await tester.tap(find.byTooltip('Remove shopping list').at(1));
+              await tester.pumpAndSettle();
+              await tester.tap(find.byTooltip('Remove shopping list').first);
+              await tester.pumpAndSettle();
+
+              // Test for absence of removed shopping lists in obx
+              expect(objectbox.shoppingListBox.getAll()[0].name,
+                  testShoppingList3.name);
+              expect(objectbox.shoppingListBox.getAll().length, 1);
+            },
+          );
+
+          testWidgets(
+            'Screen is updated when a new one is added to db',
+            (tester) async {
+              // Setup
+              final ShoppingList testShoppingList1 =
+                  ShoppingList(name: 'Test Shopping List 1');
+              final ShoppingList testShoppingList2 =
+                  ShoppingList(name: 'Test Shopping List 2');
+              final ShoppingList testShoppingList3 =
+                  ShoppingList(name: 'Test Shopping List 3');
+              final ShoppingList testShoppingList4 =
+                  ShoppingList(name: 'Test Shopping List 4');
+
+              dbSetUp(() {
+                objectbox.shoppingListBox.putMany(
+                    [testShoppingList1, testShoppingList2, testShoppingList3]);
+              });
+
+              await tester.pumpWidget(getHomeScreen());
+              await tester.pumpAndSettle();
+
+              // Test for shopping lists
+              expect(find.text(testShoppingList1.name), findsOneWidget);
+              expect(find.text(testShoppingList2.name), findsOneWidget);
+              expect(find.text(testShoppingList3.name), findsOneWidget);
+              expect(find.text(testShoppingList4.name), findsNothing);
+
+              // Add new shopping list to obx
+              objectbox.shoppingListBox.put(testShoppingList4);
+
+              await tester.runAsync(
+                () async {
+                  // Advance time for StreamBuilder to rebuild
+                  await Future.delayed(const Duration(microseconds: 500));
+
+                  await tester.pumpAndSettle();
+
+                  // Test for shopping lists
+                  expect(find.text(testShoppingList1.name), findsOneWidget);
+                  expect(find.text(testShoppingList2.name), findsOneWidget);
+                  expect(find.text(testShoppingList3.name), findsOneWidget);
+                  expect(find.text(testShoppingList4.name), findsOneWidget);
+                },
+              );
+            },
+          );
+
+          testWidgets(
+            'When tapped push ShoppingListScreen',
+            (tester) async {
+              // Setup
+              final ShoppingList testShoppingList =
+                  ShoppingList(name: 'Test Shopping List 1');
+
+              dbSetUp(() {
+                objectbox.shoppingListBox.put(testShoppingList);
+              });
+
+              await tester.pumpWidget(getHomeScreen());
+              await tester.pumpAndSettle();
+
+              // Test for presence of ShoppingListScreen
+              expect(find.byType(ShoppingListScreen), findsNothing);
+
+              // Tap a shopping list
+              await tester.tap(find.text(testShoppingList.name));
+              await tester.pumpAndSettle();
+
+              // Test for presence of ShoppingListScreen
+              expect(find.byType(ShoppingListScreen), findsOneWidget);
+            },
+          );
+        },
+      );
+
+      testWidgets(
+        'Display a button to add shopping lists',
+        (tester) async {
+          // Setup
+          dbSetUp();
+
+          await tester.pumpWidget(getHomeScreen());
+          await tester.pumpAndSettle();
+
+          // Test for FloatingActionList
+          expect(find.byType(FloatingActionButton), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'Display AddShoppingList when shopping list add button is pressed',
+        (tester) async {
+          // Setup
+          dbSetUp();
+
+          await tester.pumpWidget(getHomeScreen());
+          await tester.pumpAndSettle();
+
+          // Test for absence of AddShoppingList
+          expect(find.byType(AddShoppingList), findsNothing);
+
+          // Tap add new shopping list button
           await tester.tap(find.byType(FloatingActionButton));
           await tester.pumpAndSettle();
 
-          expect(find.byType(Form), findsOneWidget);
-        });
-      });
-
-      testWidgets(
-          'Navigates to a shopping list screen when a shopping list is pressed',
-          (tester) async {
-        await setUp(tester, 1);
-
-        // Tap on shopping list
-        await tester.tap(find.text('Shopping List 1'));
-        await tester.pumpAndSettle();
-
-        // check if Shopping List Screen exists
-        expect(find.byType(ShoppingListScreen), findsOneWidget);
-      });
-    });
-  });
-}
-
-Future<void> setUp(WidgetTester tester, int numberOfShoppingLists) async {
-  objectbox.shoppingListBox.removeAll();
-  expect(objectbox.shoppingListBox.getAll().length, 0);
-  addShoppingLists(objectbox, numberOfShoppingLists);
-  expect(objectbox.shoppingListBox.getAll().length, numberOfShoppingLists);
-  await tester.pumpWidget(getHomeScreen());
-  await tester.pumpAndSettle();
-}
-
-/// Adds [ShoppingList]s to [objectbox], [n] times
-///
-/// [ShoppingList]s are named from 'Shopping List 1' to 'Shopping List n'
-void addShoppingLists(ObjectBox objectbox, int n) {
-  for (var i = 1; i <= n; i++) {
-    objectbox.shoppingListBox.put(ShoppingList(name: 'Shopping List $i'));
-  }
-}
-
-Widget getHomeScreen() {
-  return MaterialApp(
-    home: HomeScreen(),
+          // Test for presence of AddShoppingList
+          expect(find.byType(AddShoppingList), findsOneWidget);
+        },
+      );
+    },
   );
 }
 
