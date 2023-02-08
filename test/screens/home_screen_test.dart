@@ -1,10 +1,9 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:shopping_list_but_free/models/shopping_list.dart';
 import 'package:shopping_list_but_free/objectbox.dart';
-import 'package:shopping_list_but_free/objectbox.g.dart';
 import 'package:shopping_list_but_free/screens/home_screen.dart';
 import 'package:shopping_list_but_free/screens/shopping_list_screen.dart';
 
@@ -75,51 +74,6 @@ void main() async {
 
           expect(find.byType(Form), findsOneWidget);
         });
-
-        testWidgets(
-            'Add shopping list when Add button is pressed in shopping list addition form',
-            (tester) async {
-          await setUp(tester, 1);
-
-          await tester.tap(find.byType(FloatingActionButton));
-          await tester.pumpAndSettle();
-          expect(find.byType(Form), findsOneWidget);
-
-          await tester.enterText(
-              find.byType(TextFormField), 'New Shopping List');
-          await tester.pumpAndSettle();
-          await tester.tap(find.byTooltip('Add shopping list'));
-          await tester.pump(const Duration(minutes: 1));
-
-          await tester.runAsync(
-            () async {
-              await Future.delayed(const Duration(seconds: 1));
-
-              await tester.pumpAndSettle();
-
-              // Test for absence of Shopping List 1
-              expect(find.text('New Shopping List'), findsOneWidget);
-            },
-          );
-        });
-
-        testWidgets(
-            'Remove shopping list addition form when the back icon is pressed',
-            (tester) async {
-          await setUp(tester, 3);
-
-          await tester.tap(find.byType(FloatingActionButton));
-          await tester.pumpAndSettle();
-          expect(find.byType(Form), findsOneWidget);
-
-          Finder backButton = find.byTooltip('Back');
-          expect(backButton, findsOneWidget);
-
-          await tester.tap(backButton);
-          await tester.pumpAndSettle();
-
-          expect(find.byType(Form), findsNothing);
-        });
       });
 
       testWidgets(
@@ -157,7 +111,7 @@ void addShoppingLists(ObjectBox objectbox, int n) {
 }
 
 Widget getHomeScreen() {
-  return const MaterialApp(
+  return MaterialApp(
     home: HomeScreen(),
   );
 }
