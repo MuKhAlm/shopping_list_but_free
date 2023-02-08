@@ -105,7 +105,7 @@ void main() async {
 
           await widgetSetUp(tester, testShoppingList);
 
-          // Tap back arrow
+          // Tap outside card
           await tester.tapAt(const Offset(5, 5));
           await tester.pumpAndSettle();
 
