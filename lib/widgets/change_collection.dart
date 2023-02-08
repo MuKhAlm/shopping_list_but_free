@@ -82,6 +82,7 @@ class _ChangeCollectionState extends State<ChangeCollection> {
                           },
                         ),
                         IconButton(
+                          tooltip: 'Submit',
                           onPressed: () {
                             final String shoppingItemName =
                                 widget.shoppingItem.name.toLowerCase();
