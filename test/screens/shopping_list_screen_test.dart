@@ -761,16 +761,8 @@ void main() async {
               await tester.tap(find.text('Change\nCollection'));
               await tester.pumpAndSettle();
 
-              await tester.runAsync(
-                () async {
-                  await Future.delayed(const Duration(seconds: 1));
-
-                  await tester.pumpAndSettle();
-
-                  // Test for ChangeCollection Widget
-                  expect(find.byType(ChangeCollection), findsOneWidget);
-                },
-              );
+              // Test for ChangeCollection Widget
+              expect(find.byType(ChangeCollection), findsOneWidget);
             },
           );
         },
