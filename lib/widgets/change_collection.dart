@@ -63,6 +63,7 @@ class _ChangeCollectionState extends State<ChangeCollection> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         DropdownButtonFormField<Collection>(
+                          isExpanded: true,
                           value: _selectedCollection,
                           items: collections
                               .map(
