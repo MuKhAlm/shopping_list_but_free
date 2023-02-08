@@ -5,6 +5,7 @@ import 'package:shopping_list_but_free/models/collection.dart';
 import 'package:shopping_list_but_free/models/shopping_item.dart';
 import 'package:shopping_list_but_free/objectbox.dart';
 import 'package:shopping_list_but_free/objectbox.g.dart';
+import 'package:shopping_list_but_free/widgets/add_collection.dart';
 
 /// Displays a **card** containing a **form**,
 ///
@@ -62,24 +63,47 @@ class _ChangeCollectionState extends State<ChangeCollection> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        DropdownButtonFormField<Collection>(
-                          isExpanded: true,
-                          value: _selectedCollection,
-                          items: collections
-                              .map(
-                                (collection) => DropdownMenuItem(
-                                  value: collection,
-                                  child: Text(collection.name),
-                                ),
-                              )
-                              .toList(),
-                          onChanged: (value) {
-                            if (value != null) {
-                              setState(() {
-                                _selectedCollection = value;
-                              });
-                            }
-                          },
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: DropdownButtonFormField<Collection>(
+                                isExpanded: true,
+                                value: _selectedCollection,
+                                items: collections
+                                    .map(
+                                      (collection) => DropdownMenuItem(
+                                        value: collection,
+                                        child: Text(collection.name),
+                                      ),
+                                    )
+                                    .toList(),
+                                onChanged: (value) {
+                                  if (value != null) {
+                                    setState(() {
+                                      _selectedCollection = value;
+                                    });
+                                  }
+                                },
+                              ),
+                            ),
+                            IconButton(
+                              tooltip: 'Add to a new collection',
+                              onPressed: () {
+                                Navigator.of(context).pushReplacement(
+                                  PageRouteBuilder(
+                                    opaque: false,
+                                    barrierColor: Colors.black.withOpacity(0.5),
+                                    barrierDismissible: true,
+                                    pageBuilder: (_, __, ___) => AddCollection(
+                                      shoppingItem: widget.shoppingItem,
+                                    ),
+                                  ),
+                                );
+                              },
+                              icon: const Icon(Icons.add),
+                            ),
+                          ],
                         ),
                         IconButton(
                           tooltip: 'Submit',
