@@ -1,8 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:shopping_list_but_free/models/shopping_list.dart';
 import 'package:shopping_list_but_free/objectbox.dart';
+import 'package:shopping_list_but_free/widgets/add_entity.dart';
 
 /// Displays a form that creates a new **ShoppingList** and stores it to obx when submitted.
 class AddShoppingList extends StatefulWidget {
@@ -13,72 +12,18 @@ class AddShoppingList extends StatefulWidget {
 }
 
 class _AddShoppingListState extends State<AddShoppingList> {
-  String _newShoppingListName = '';
-
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: SizedBox(
-        width: min(MediaQuery.of(context).size.width - 10, 300),
-        height: MediaQuery.of(context).size.height / 3,
-        child: Card(
-          elevation: 20,
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  BackButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
-                ],
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Form(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        TextFormField(
-                          autofocus: true,
-                          decoration: const InputDecoration(
-                            hintText: 'Shopping list name',
-                          ),
-                          initialValue: _newShoppingListName,
-                          onChanged: (value) {
-                            setState(() {
-                              _newShoppingListName = value;
-                            });
-                          },
-                          onFieldSubmitted: (value) {
-                            _submit();
-                          },
-                        ),
-                        IconButton(
-                          tooltip: 'Submit',
-                          onPressed: (() {
-                            _submit();
-                          }),
-                          icon: const Icon(
-                            Icons.done,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+    return AddEntity(
+      onSubmit: _submit,
+      inputFieldHintText: 'Shopping list name',
     );
   }
 
-  void _submit() {
+  void _submit(String newShoppingListName) {
     String name = 'Untitled';
-    if (_newShoppingListName != '') {
-      name = _newShoppingListName;
+    if (newShoppingListName != '') {
+      name = newShoppingListName;
     }
 
     objectbox.shoppingListBox.put(ShoppingList(name: name));

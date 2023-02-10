@@ -1,10 +1,9 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:shopping_list_but_free/models/collection.dart';
 import 'package:shopping_list_but_free/models/shopping_item.dart';
 import 'package:shopping_list_but_free/objectbox.dart';
 import 'package:shopping_list_but_free/objectbox.g.dart';
+import 'package:shopping_list_but_free/widgets/add_entity.dart';
 
 /// Displays a form that creates a new **Collection** and stores it to obx when submitted.
 ///
@@ -22,70 +21,16 @@ class AddCollection extends StatefulWidget {
 }
 
 class _AddCollectionState extends State<AddCollection> {
-  String _collectionName = '';
-
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: SizedBox(
-        width: min(MediaQuery.of(context).size.width - 10, 300),
-        height: MediaQuery.of(context).size.height / 3,
-        child: Card(
-          elevation: 20,
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  BackButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
-                ],
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Form(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        TextFormField(
-                          autofocus: true,
-                          decoration: const InputDecoration(
-                            hintText: 'Collection name',
-                          ),
-                          initialValue: _collectionName,
-                          onChanged: (value) {
-                            setState(() {
-                              _collectionName = value;
-                            });
-                          },
-                          onFieldSubmitted: (value) {
-                            _submit();
-                          },
-                        ),
-                        IconButton(
-                          tooltip: 'Submit',
-                          onPressed: (() {
-                            _submit();
-                          }),
-                          icon: const Icon(
-                            Icons.done,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+    return AddEntity(
+      onSubmit: _submit,
+      inputFieldHintText: 'Collection name',
     );
   }
 
-  void _submit() {
-    final Collection newCollection = Collection(name: _collectionName);
+  void _submit(String collectionName) {
+    final Collection newCollection = Collection(name: collectionName);
 
     // Add shoppingItem's name to collection if a shoppingItem is provided
     if (widget.shoppingItem != null) {
