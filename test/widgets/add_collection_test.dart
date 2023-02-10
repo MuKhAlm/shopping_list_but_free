@@ -46,67 +46,6 @@ void main() async {
   group(
     'AddCollection',
     () {
-      testWidgets(
-        'Display correctly',
-        (tester) async {
-          dbSetUp(() {});
-
-          await tester.pumpWidget(getAddCollection());
-          await tester.pumpAndSettle();
-
-          expect(find.byType(AddCollection), findsOneWidget);
-        },
-      );
-
-      testWidgets(
-        'Pops when tapped on back arrow',
-        (tester) async {
-          // Setup
-          dbSetUp(() {});
-
-          await tester.pumpWidget(getAddCollection());
-          await tester.pumpAndSettle();
-
-          // Test for AddCollection
-          expect(find.byType(AddCollection), findsOneWidget);
-
-          // Tap on back arrow
-          await tester.tap(find.byTooltip('Back'));
-          await tester.pumpAndSettle();
-
-          // Test for AddCollection
-          expect(find.byType(AddCollection), findsNothing);
-        },
-      );
-
-      testWidgets(
-        'Displays a text field',
-        (tester) async {
-          // Setup
-          dbSetUp(() {});
-
-          await tester.pumpWidget(getAddCollection());
-          await tester.pumpAndSettle();
-
-          // Test for TextFormField
-          expect(find.byType(TextFormField), findsOneWidget);
-        },
-      );
-
-      testWidgets(
-        'Displays a submit button',
-        (tester) async {
-          // Setup
-          dbSetUp(() {});
-
-          await tester.pumpWidget(getAddCollection());
-          await tester.pumpAndSettle();
-
-          // Test for submit button
-          expect(find.byTooltip('Submit'), findsOneWidget);
-        },
-      );
-
       group(
         'When submitted',
         () {

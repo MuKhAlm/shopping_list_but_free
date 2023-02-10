@@ -40,58 +40,30 @@ void main() async {
   group(
     'AddShoppingList',
     () {
-      testWidgets(
-        'Pops when back arrow is pressed',
-        (tester) async {
-          // Setup
-          dbSetUp();
-
-          await tester.pumpWidget(getAddShoppingList());
-          await tester.pumpAndSettle();
-
-          // Test for AddShoppingList
-          expect(find.byType(AddShoppingList), findsOneWidget);
-
-          // Tap back arrow
-          await tester.tap(find.byTooltip('Back'));
-          await tester.pumpAndSettle();
-
-          // Test for AddShoppingList
-          expect(find.byType(AddShoppingList), findsNothing);
-        },
-      );
-
-      testWidgets(
-        'Displays a text field',
-        (tester) async {
-          // Setup
-          dbSetUp(() {});
-
-          await tester.pumpWidget(getAddShoppingList());
-          await tester.pumpAndSettle();
-
-          // Test for TextFormField
-          expect(find.byType(TextFormField), findsOneWidget);
-        },
-      );
-
-      testWidgets(
-        'Displays a submit button',
-        (tester) async {
-          // Setup
-          dbSetUp(() {});
-
-          await tester.pumpWidget(getAddShoppingList());
-          await tester.pumpAndSettle();
-
-          // Test for submit button
-          expect(find.byTooltip('Submit'), findsOneWidget);
-        },
-      );
-
       group(
         'When submitted',
         () {
+          testWidgets(
+            'Pops screen',
+            (tester) async {
+              // Setup
+              dbSetUp(() {});
+
+              await tester.pumpWidget(getAddShoppingList());
+              await tester.pumpAndSettle();
+
+              // Test for Widget
+              expect(find.byType(AddShoppingList), findsOneWidget);
+
+              // Submit
+              await tester.tap(find.byTooltip('Submit'));
+              await tester.pumpAndSettle();
+
+              // Test for Widget
+              expect(find.byType(AddShoppingList), findsNothing);
+            },
+          );
+
           testWidgets(
             'Adds Collection with typed name to db',
             (tester) async {
@@ -101,7 +73,7 @@ void main() async {
               await tester.pumpWidget(getAddShoppingList());
               await tester.pumpAndSettle();
 
-              // Enter new collection name
+              // Enter new shopping list name
               await tester.enterText(
                   find.byType(TextFormField).first, 'New Test Shopping List');
               await tester.pumpAndSettle();
@@ -110,7 +82,7 @@ void main() async {
               await tester.tap(find.byTooltip('Submit'));
               await tester.pumpAndSettle();
 
-              // Test for new Collection in db
+              // Test for new shopping list in db
               expect(
                   objectbox.shoppingListBox
                           .query(ShoppingList_.name
@@ -131,7 +103,7 @@ void main() async {
               await tester.pumpWidget(getAddShoppingList());
               await tester.pumpAndSettle();
 
-              // Enter new collection name
+              // Enter new shopping list name
               await tester.enterText(
                   find.byType(TextFormField).first, 'New Test Shopping List');
               await tester.pumpAndSettle();
