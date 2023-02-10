@@ -21,10 +21,10 @@ packages:
     dependency: transitive
     description:
       name: args
-      sha256: "139d809800a412ebb26a3892da228b2d0ba36f0ef5d9a82166e5e52ec8d61611"
+      sha256: "4cab82a83ffef80b262ddedf47a0a8e56ee6fbf7fe21e6e768b02792034dd440"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.2"
+    version: "2.4.0"
   async:
     dependency: transitive
     description:
@@ -213,10 +213,10 @@ packages:
     dependency: transitive
     description:
       name: fixnum
-      sha256: "04be3e934c52e082558cc9ee21f42f5c1cd7a1262f4c63cd0357c08d5bba81ec"
+      sha256: "25517a4deb0c03aa0f32fd12db525856438902d9c16536311e76cdc57b31d7d1"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.1"
+    version: "1.1.0"
   flat_buffers:
     dependency: transitive
     description:
@@ -367,26 +367,26 @@ packages:
     dependency: "direct main"
     description:
       name: objectbox
-      sha256: dea353beab74dd3f118a9ae5bc6ebae780d78a97cb94729281089f241ed5cab7
+      sha256: c18d41f4e81e5a30fc0e2200e9e8306f5ccc8a9b61fe3746426359690c33dc7b
       url: "https://pub.dev"
     source: hosted
-    version: "1.7.1"
+    version: "1.7.2"
   objectbox_flutter_libs:
     dependency: "direct main"
     description:
       name: objectbox_flutter_libs
-      sha256: "12ae878f477e9b092cb5494d0af4431286d992e1d83bf01273496fd635946d97"
+      sha256: "179a2edfca5eb80abee6e829ebff69872ad20c9f07c2527fe9d098f4bf5a5b83"
       url: "https://pub.dev"
     source: hosted
-    version: "1.7.1"
+    version: "1.7.2"
   objectbox_generator:
     dependency: "direct dev"
     description:
       name: objectbox_generator
-      sha256: cda7366c71d9b1b096ed23f24890cbf6b6e14ee3671017fdd86b8fab12ed7950
+      sha256: "728a9ccf4d6a2ac44a016f6cb9798e4a31ee92b79828526181e0de97a3506c28"
       url: "https://pub.dev"
     source: hosted
-    version: "1.7.1"
+    version: "1.7.2"
   package_config:
     dependency: transitive
     description:
@@ -524,10 +524,10 @@ packages:
     dependency: transitive
     description:
       name: source_gen
-      sha256: "2d79738b6bbf38a43920e2b8d189e9a3ce6cc201f4b8fc76be5e4fe377b1c38d"
+      sha256: c2bea18c95cfa0276a366270afaa2850b09b4a76db95d546f3d003dcc7011298
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.6"
+    version: "1.2.7"
   source_span:
     dependency: transitive
     description:
@@ -649,5 +649,5 @@ packages:
     source: hosted
     version: "3.1.1"
 sdks:
-  dart: ">=2.18.6 <4.0.0"
+  dart: ">=2.19.0 <3.0.0"
   flutter: ">=3.0.0"
