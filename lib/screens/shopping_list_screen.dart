@@ -125,6 +125,9 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                 );
               }
 
+              final ShoppingList shoppingList =
+                  shoppingListSnapshot.data!.first;
+
               return ListView(
                 children: [
                   ExpansionPanelList(
@@ -139,11 +142,11 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                     children: collectionsSnapshot.data!
                         .where((Collection collection) => collection
                             .shoppingItemsNames
-                            .any((String shoppingItemName) =>
-                                shoppingListSnapshot.data![0].shoppingItems
-                                    .map((ShoppingItem shoppingItem) =>
-                                        shoppingItem.name.toLowerCase())
-                                    .contains(shoppingItemName)))
+                            .any((String shoppingItemName) => shoppingList
+                                .shoppingItems
+                                .map((ShoppingItem shoppingItem) =>
+                                    shoppingItem.name.toLowerCase())
+                                .contains(shoppingItemName)))
                         .map(
                           (Collection collection) => ExpansionPanel(
                             canTapOnHeader: true,
@@ -156,8 +159,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                             },
                             body: Column(
                               // Relevant ShoppingItems for each Collection
-                              children: shoppingListSnapshot
-                                  .data![0].shoppingItems
+                              children: shoppingList.shoppingItems
                                   .where((ShoppingItem shoppingItem) =>
                                       collection.shoppingItemsNames.contains(
                                           shoppingItem.name.toLowerCase()))
@@ -169,9 +171,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                                         child: Checkbox(
                                           onChanged: (value) {
                                             toggleCheck(
-                                                shoppingItem,
-                                                shoppingListSnapshot
-                                                    .data!.first);
+                                                shoppingItem, shoppingList);
                                           },
                                           value: shoppingItem.checked,
                                         ),
@@ -186,8 +186,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                                         shoppingItem.name,
                                       ),
                                       onTap: () {
-                                        toggleCheck(shoppingItem,
-                                            shoppingListSnapshot.data!.first);
+                                        toggleCheck(shoppingItem, shoppingList);
                                       },
                                       trailing: Row(
                                         mainAxisSize: MainAxisSize.min,
@@ -199,9 +198,8 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                                               objectbox.shoppingItemBox
                                                   .put(shoppingItem);
 
-                                              objectbox.shoppingListBox.put(
-                                                  shoppingListSnapshot
-                                                      .data!.first);
+                                              objectbox.shoppingListBox
+                                                  .put(shoppingList);
                                             },
                                             icon: const Icon(Icons.add),
                                           ),
@@ -216,9 +214,8 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                                                 objectbox.shoppingItemBox
                                                     .put(shoppingItem);
 
-                                                objectbox.shoppingListBox.put(
-                                                    shoppingListSnapshot
-                                                        .data!.first);
+                                                objectbox.shoppingListBox
+                                                    .put(shoppingList);
                                               }
                                             },
                                             icon: const Icon(Icons.remove),
@@ -228,13 +225,11 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                                             onSelected: (value) {
                                               if (value == 'delete') {
                                                 // Remove shopping item from shopping list
-                                                shoppingListSnapshot
-                                                    .data![0].shoppingItems
+                                                shoppingList.shoppingItems
                                                     .remove(shoppingItem);
                                                 // Put new shopping list in obx
-                                                objectbox.shoppingListBox.put(
-                                                    shoppingListSnapshot
-                                                        .data![0]);
+                                                objectbox.shoppingListBox
+                                                    .put(shoppingList);
                                                 // Remove shopping item form obx
                                                 objectbox.shoppingItemBox
                                                     .remove(shoppingItem.id);
