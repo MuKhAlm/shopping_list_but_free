@@ -207,7 +207,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                                                         collection.id)),
                                       );
                                     }
-                                    if (value == 'remove') {
+                                    if (value == 'delete') {
                                       // Only ShoppingItems in collection
                                       final List<ShoppingItem> shoppingItems =
                                           shoppingList.shoppingItems
