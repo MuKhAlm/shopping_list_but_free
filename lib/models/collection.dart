@@ -13,9 +13,6 @@ class Collection {
   /// All items **must** be **lower-case**.
   List<String> shoppingItemsNames = [];
 
-  @Transient()
-  bool expanded = true;
-
   /// Creates an entity that works as a collection for [ShoppingItem]s by type.
   ///
   /// [id] is only to be assign by [ObjectBox].

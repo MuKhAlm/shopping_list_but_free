@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shopping_list_but_free/models/collection.dart';
 import 'package:shopping_list_but_free/models/shopping_item.dart';
@@ -24,6 +25,9 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
   List<Collection> _prevRelevantCollections = [];
   int _count = 0;
 
+  /// Expansion state of each Collection added to this Widget
+  final Map<int, bool> _collectionsExpansionState = {};
+
   late final Stream<List<ShoppingList>> _shoppingListStream = objectbox
       .shoppingListBox
       .query(ShoppingList_.id.equals(widget.shoppingListId))
@@ -35,9 +39,6 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
       .query()
       .watch(triggerImmediately: true)
       .map((query) => query.find());
-
-  /// Keeps track of expanded and collapsed [Collection]s
-  List<bool> _expanded = [];
 
   @override
   Widget build(BuildContext context) {
@@ -106,12 +107,6 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
               child: CircularProgressIndicator(),
             );
           }
-
-          _expanded = collectionsSnapshot.data!
-              .map(
-                (Collection collection) => collection.expanded,
-              )
-              .toList();
           return StreamBuilder(
             stream: _shoppingListStream,
             builder: (context, shoppingListSnapshot) {
@@ -144,6 +139,24 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                           .contains(shoppingItemName)))
                   .toList();
 
+              // Only init _collectionsExpansionState if the Collections in
+              // relevantCollections and _collectionsExpansionState are different
+              List<int> prevRelevantCollectionsIds = _prevRelevantCollections
+                  .map((Collection collection) => collection.id)
+                  .toList();
+              List<int> relevantCollectionsIds = relevantCollections
+                  .map((Collection collection) => collection.id)
+                  .toList();
+              if (!listEquals(
+                  prevRelevantCollectionsIds, relevantCollectionsIds)) {
+                for (int id in relevantCollectionsIds) {
+                  // only init isExpanded if the Collection is different
+                  if (_collectionsExpansionState[id] == null) {
+                    _collectionsExpansionState[id] = true;
+                  }
+                }
+              }
+
               // Generates a new key for ExpansionPanelList if the relevant Collections has changed size
               if (_prevRelevantCollections.length !=
                   relevantCollections.length) {
@@ -154,11 +167,16 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
               return ListView(
                 children: [
                   ExpansionPanelList(
+                    key: Key('$_count'),
                     expansionCallback: (panelIndex, isExpanded) {
-                      collectionsSnapshot.data![panelIndex].expanded =
-                          !isExpanded;
+                      final Collection collection =
+                          relevantCollections[panelIndex];
+
+                      // Reverse the expansion state of corresponding collection panel
                       setState(() {
-                        _expanded[panelIndex] = !isExpanded;
+                        _collectionsExpansionState[collection.id] =
+                            !(_collectionsExpansionState[collection.id]
+                                as bool);
                       });
                     },
                     // Relevant collections
@@ -166,8 +184,9 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                         .map(
                           (Collection collection) => ExpansionPanel(
                             canTapOnHeader: true,
-                            isExpanded: _expanded[
-                                collectionsSnapshot.data!.indexOf(collection)],
+                            isExpanded:
+                                _collectionsExpansionState[collection.id]
+                                    as bool,
                             headerBuilder: (context, isExpanded) {
                               return ListTile(
                                 title: Text(collection.name),
