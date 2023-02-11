@@ -28,60 +28,72 @@ class _AddEntityState extends State<AddEntity> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: SizedBox(
-        width: min(MediaQuery.of(context).size.width - 10, 300),
-        height: MediaQuery.of(context).size.height / 3,
-        child: Card(
-          elevation: 20,
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  BackButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
-                ],
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Form(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return Scaffold(
+      backgroundColor: Colors.black.withOpacity(0.5),
+      body: Stack(
+        children: [
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          Center(
+            child: SizedBox(
+              width: min(MediaQuery.of(context).size.width - 10, 300),
+              height: MediaQuery.of(context).size.height / 3,
+              child: Card(
+                elevation: 20,
+                child: Column(
+                  children: [
+                    Row(
                       children: [
-                        TextFormField(
-                          autofocus: true,
-                          decoration: InputDecoration(
-                            hintText: widget.inputFieldHintText,
-                          ),
-                          initialValue: _newEntityName,
-                          onChanged: (value) {
-                            setState(() {
-                              _newEntityName = value;
-                            });
-                          },
-                          onFieldSubmitted: (value) {
-                            widget.onSubmit(_newEntityName);
-                          },
-                        ),
-                        IconButton(
-                          tooltip: 'Submit',
-                          onPressed: (() {
-                            widget.onSubmit(_newEntityName);
-                          }),
-                          icon: const Icon(
-                            Icons.done,
-                          ),
+                        BackButton(
+                          onPressed: () => Navigator.of(context).pop(),
                         ),
                       ],
                     ),
-                  ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Form(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              TextFormField(
+                                autofocus: true,
+                                decoration: InputDecoration(
+                                  hintText: widget.inputFieldHintText,
+                                ),
+                                initialValue: _newEntityName,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _newEntityName = value;
+                                  });
+                                },
+                                onFieldSubmitted: (value) {
+                                  widget.onSubmit(_newEntityName);
+                                },
+                              ),
+                              IconButton(
+                                tooltip: 'Submit',
+                                onPressed: (() {
+                                  widget.onSubmit(_newEntityName);
+                                }),
+                                icon: const Icon(
+                                  Icons.done,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

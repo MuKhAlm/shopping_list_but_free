@@ -27,8 +27,6 @@ class HomeScreen extends StatelessWidget {
           Navigator.of(context).push(
             PageRouteBuilder(
               opaque: false,
-              barrierColor: Colors.black.withOpacity(0.5),
-              barrierDismissible: true,
               pageBuilder: (_, __, ___) => const AddShoppingList(),
             ),
           );

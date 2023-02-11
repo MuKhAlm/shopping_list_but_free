@@ -89,8 +89,6 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
           Navigator.of(context).push(
             PageRouteBuilder(
               opaque: false,
-              barrierColor: Colors.black.withOpacity(0.5),
-              barrierDismissible: true,
               pageBuilder: (_, __, ___) => AddShoppingItem(
                 shoppingListId: widget.shoppingListId,
               ),

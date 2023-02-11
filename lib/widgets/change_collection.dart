@@ -93,8 +93,6 @@ class _ChangeCollectionState extends State<ChangeCollection> {
                                 Navigator.of(context).pushReplacement(
                                   PageRouteBuilder(
                                     opaque: false,
-                                    barrierColor: Colors.black.withOpacity(0.5),
-                                    barrierDismissible: true,
                                     pageBuilder: (_, __, ___) => AddCollection(
                                       shoppingItem: widget.shoppingItem,
                                     ),
