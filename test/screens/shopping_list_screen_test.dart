@@ -249,6 +249,130 @@ void main() async {
               expect(find.text(collection2.name), findsNothing);
             },
           );
+
+          testWidgets(
+            'Display options PopupMenuButton',
+            (tester) async {
+              shoppingList = ShoppingList(name: 'Test Shopping List');
+              ShoppingItem shoppingItem =
+                  ShoppingItem(name: 'Test Shopping Item');
+              shoppingList.shoppingItems.add(shoppingItem);
+
+              Collection collection = Collection(name: 'Test Collection');
+              collection.shoppingItemsNames
+                  .add(shoppingItem.name.toLowerCase());
+
+              setUp(() {
+                objectbox.shoppingListBox.put(shoppingList);
+                objectbox.collectionBox.put(collection);
+              });
+
+              await tester.pumpWidget(getShoppingListScreen());
+              await tester.pumpAndSettle();
+
+              // Test for presence of Collection menu button
+              expect(find.byTooltip('Collection options'), findsOneWidget);
+            },
+          );
+
+          testWidgets(
+            'Options menu display remove option',
+            (tester) async {
+              shoppingList = ShoppingList(name: 'Test Shopping List');
+              ShoppingItem shoppingItem =
+                  ShoppingItem(name: 'Test Shopping Item');
+              shoppingList.shoppingItems.add(shoppingItem);
+
+              Collection collection = Collection(name: 'Test Collection');
+              collection.shoppingItemsNames
+                  .add(shoppingItem.name.toLowerCase());
+
+              setUp(() {
+                objectbox.shoppingListBox.put(shoppingList);
+                objectbox.collectionBox.put(collection);
+              });
+
+              await tester.pumpWidget(getShoppingListScreen());
+              await tester.pumpAndSettle();
+
+              // Test for remove option
+              expect(find.text('Remove'), findsNothing);
+
+              // Tap menu
+              await tester.tap(find.byTooltip('Collection options'));
+              await tester.pumpAndSettle();
+
+              // Test for remove option
+              expect(find.text('Remove'), findsOneWidget);
+            },
+          );
+
+          testWidgets(
+            'Tapping remove option in options removes collection and all corresponding shopping item',
+            (tester) async {
+              shoppingList = ShoppingList(name: 'Test Shopping List');
+              ShoppingItem shoppingItem1 =
+                  ShoppingItem(name: 'Test Shopping Item 1');
+              ShoppingItem shoppingItem2 =
+                  ShoppingItem(name: 'Test Shopping Item 2');
+              ShoppingItem shoppingItem3 =
+                  ShoppingItem(name: 'Test Shopping Item 3');
+              shoppingList.shoppingItems.add(shoppingItem1);
+              shoppingList.shoppingItems.add(shoppingItem2);
+              shoppingList.shoppingItems.add(shoppingItem3);
+
+              // Create two collections, add items 1 and 2 to collection 1
+              // and item 3 to collection 3
+              Collection collection1 = Collection(name: 'Test Collection 1');
+              Collection collection2 = Collection(name: 'Test Collection 2');
+              collection1.shoppingItemsNames
+                  .add(shoppingItem1.name.toLowerCase());
+              collection1.shoppingItemsNames
+                  .add(shoppingItem2.name.toLowerCase());
+              collection2.shoppingItemsNames
+                  .add(shoppingItem3.name.toLowerCase());
+
+              setUp(() {
+                objectbox.shoppingListBox.put(shoppingList);
+                objectbox.collectionBox.put(collection1);
+                objectbox.collectionBox.put(collection2);
+              });
+
+              await tester.pumpWidget(getShoppingListScreen());
+              await tester.pumpAndSettle();
+
+              // Tap menu
+              await tester.tap(find.byTooltip('Collection options').first);
+              await tester.pumpAndSettle();
+
+              // Test for collection and corresponding ShoppingItems
+              expect(find.text(collection1.name), findsOneWidget);
+              expect(find.text(collection2.name), findsOneWidget);
+              expect(find.text(shoppingItem1.name), findsOneWidget);
+              expect(find.text(shoppingItem2.name), findsOneWidget);
+              expect(find.text(shoppingItem3.name), findsOneWidget);
+
+              // Tap remove option
+              await tester.tap(find.text('Remove'));
+              await tester.pumpAndSettle();
+
+              await tester.runAsync(
+                () async {
+                  // Allow StreamBuilder to rebuild
+                  await Future.delayed(const Duration(seconds: 1));
+
+                  await tester.pumpAndSettle();
+
+                  // Test for collection and corresponding ShoppingItems
+                  expect(find.text(collection1.name), findsNothing);
+                  expect(find.text(collection2.name), findsOneWidget);
+                  expect(find.text(shoppingItem1.name), findsNothing);
+                  expect(find.text(shoppingItem2.name), findsNothing);
+                  expect(find.text(shoppingItem3.name), findsOneWidget);
+                },
+              );
+            },
+          );
         },
       );
 
