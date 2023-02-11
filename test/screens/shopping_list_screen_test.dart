@@ -31,7 +31,7 @@ void main() async {
   Widget getShoppingListScreen() => MaterialApp(
         theme: ThemeData(useMaterial3: true),
         home: ShoppingListScreen(
-          shoppingList: shoppingList,
+          shoppingListId: shoppingList.id,
         ),
       );
 

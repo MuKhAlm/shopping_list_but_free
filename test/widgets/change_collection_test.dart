@@ -36,7 +36,7 @@ void main() async {
         useMaterial3: true,
       ),
       home: ShoppingListScreen(
-        shoppingList: shoppingList,
+        shoppingListId: shoppingList.id,
       ),
     ));
     await tester.pumpAndSettle();
