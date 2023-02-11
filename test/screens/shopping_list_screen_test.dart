@@ -7,6 +7,7 @@ import 'package:shopping_list_but_free/models/shopping_item.dart';
 import 'package:shopping_list_but_free/models/shopping_list.dart';
 import 'package:shopping_list_but_free/objectbox.dart';
 import 'package:shopping_list_but_free/screens/shopping_list_screen.dart';
+import 'package:shopping_list_but_free/widgets/add_shopping_item.dart';
 import 'package:shopping_list_but_free/widgets/change_collection.dart';
 
 void main() async {
@@ -246,13 +247,6 @@ void main() async {
               // Test for presence of collection1 and absence of collection2
               expect(find.text(collection1.name), findsOneWidget);
               expect(find.text(collection2.name), findsNothing);
-            },
-          );
-
-          testWidgets(
-            'Display only relevant ShoppingItems for each Collection',
-            (tester) async {
-              // TODO: Implement (needs implementing collections removal first)
             },
           );
         },
@@ -765,6 +759,29 @@ void main() async {
               expect(find.byType(ChangeCollection), findsOneWidget);
             },
           );
+        },
+      );
+
+      testWidgets(
+        'Pushes AddShoppingItem when floating action button is pressed',
+        (tester) async {
+          shoppingList = ShoppingList(name: 'Test Shopping List');
+
+          setUp(() {
+            objectbox.shoppingListBox.put(shoppingList);
+          });
+
+          await tester.pumpWidget(getShoppingListScreen());
+          await tester.pumpAndSettle();
+
+          // Test for AddShoppingItem Widget
+          expect(find.byType(AddShoppingItem), findsNothing);
+
+          await tester.tap(find.byTooltip('Add a new shopping item'));
+          await tester.pumpAndSettle();
+
+          // Test for AddShoppingItem Widget
+          expect(find.byType(AddShoppingItem), findsOneWidget);
         },
       );
     },
