@@ -9,6 +9,7 @@ import 'package:shopping_list_but_free/objectbox.dart';
 import 'package:shopping_list_but_free/screens/shopping_list_screen.dart';
 import 'package:shopping_list_but_free/widgets/add_shopping_item.dart';
 import 'package:shopping_list_but_free/widgets/change_collection.dart';
+import 'package:shopping_list_but_free/widgets/change_collection_name.dart';
 
 void main() async {
   // Initialize objectbox
@@ -272,6 +273,74 @@ void main() async {
 
               // Test for presence of Collection menu button
               expect(find.byTooltip('Collection options'), findsOneWidget);
+            },
+          );
+
+          testWidgets(
+            'Options menu display change name option',
+            (tester) async {
+              shoppingList = ShoppingList(name: 'Test Shopping List');
+              ShoppingItem shoppingItem =
+                  ShoppingItem(name: 'Test Shopping Item');
+              shoppingList.shoppingItems.add(shoppingItem);
+
+              Collection collection = Collection(name: 'Test Collection');
+              collection.shoppingItemsNames
+                  .add(shoppingItem.name.toLowerCase());
+
+              setUp(() {
+                objectbox.shoppingListBox.put(shoppingList);
+                objectbox.collectionBox.put(collection);
+              });
+
+              await tester.pumpWidget(getShoppingListScreen());
+              await tester.pumpAndSettle();
+
+              // Test for change name option
+              expect(find.text('Change\nName'), findsNothing);
+
+              // Tap menu
+              await tester.tap(find.byTooltip('Collection options'));
+              await tester.pumpAndSettle();
+
+              // Test for change name option
+              expect(find.text('Change\nName'), findsOneWidget);
+            },
+          );
+
+          testWidgets(
+            'Tapping on change name option pushes ChangeCollectionName Widget',
+            (tester) async {
+              shoppingList = ShoppingList(name: 'Test Shopping List');
+              ShoppingItem shoppingItem =
+                  ShoppingItem(name: 'Test Shopping Item');
+              shoppingList.shoppingItems.add(shoppingItem);
+
+              Collection collection = Collection(name: 'Test Collection');
+              collection.shoppingItemsNames
+                  .add(shoppingItem.name.toLowerCase());
+
+              setUp(() {
+                objectbox.shoppingListBox.put(shoppingList);
+                objectbox.collectionBox.put(collection);
+              });
+
+              await tester.pumpWidget(getShoppingListScreen());
+              await tester.pumpAndSettle();
+
+              // Tap menu
+              await tester.tap(find.byTooltip('Collection options'));
+              await tester.pumpAndSettle();
+
+              // Test for ChangeCollectionName Widget
+              expect(find.byType(ChangeCollectionName), findsNothing);
+
+              // Tap change name
+              await tester.tap(find.text('Change\nName'));
+              await tester.pumpAndSettle();
+
+              // Test for ChangeCollectionName Widget
+              expect(find.byType(ChangeCollectionName), findsOneWidget);
             },
           );
 
