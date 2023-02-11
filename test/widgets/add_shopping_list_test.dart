@@ -65,7 +65,7 @@ void main() async {
           );
 
           testWidgets(
-            'Adds Collection with typed name to db',
+            'Adds ShoppingList with typed name to db',
             (tester) async {
               // Setup
               dbSetUp(() {});
@@ -91,32 +91,6 @@ void main() async {
                           .findFirst() !=
                       null,
                   true);
-            },
-          );
-
-          testWidgets(
-            'Adds Collection with typed name to db',
-            (tester) async {
-              // Setup
-              dbSetUp(() {});
-
-              await tester.pumpWidget(getAddShoppingList());
-              await tester.pumpAndSettle();
-
-              // Enter new shopping list name
-              await tester.enterText(
-                  find.byType(TextFormField).first, 'New Test Shopping List');
-              await tester.pumpAndSettle();
-
-              // Test for AddShoppingList
-              expect(find.byType(AddShoppingList), findsOneWidget);
-
-              // Submit
-              await tester.tap(find.byTooltip('Submit'));
-              await tester.pumpAndSettle();
-
-              // Test for AddShoppingList
-              expect(find.byType(AddShoppingList), findsNothing);
             },
           );
         },
