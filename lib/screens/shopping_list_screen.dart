@@ -8,10 +8,10 @@ import 'package:shopping_list_but_free/widgets/add_shopping_item.dart';
 import 'package:shopping_list_but_free/widgets/change_collection.dart';
 
 class ShoppingListScreen extends StatefulWidget {
-  final ShoppingList shoppingList;
+  final int shoppingListId;
 
   const ShoppingListScreen({
-    required this.shoppingList,
+    required this.shoppingListId,
     super.key,
   });
 
@@ -20,11 +20,9 @@ class ShoppingListScreen extends StatefulWidget {
 }
 
 class _ShoppingListScreenState extends State<ShoppingListScreen> {
-  late final _shoppingList = widget.shoppingList;
-
   late final Stream<List<ShoppingList>> _shoppingListStream = objectbox
       .shoppingListBox
-      .query(ShoppingList_.id.equals(_shoppingList.id))
+      .query(ShoppingList_.id.equals(widget.shoppingListId))
       .watch(triggerImmediately: true)
       .map((query) => query.find());
 
@@ -41,21 +39,27 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_shoppingList.name),
+        title: Text(
+          objectbox.shoppingListBox.get(widget.shoppingListId) != null
+              ? objectbox.shoppingListBox.get(widget.shoppingListId)!.name
+              : 'Shopping List',
+        ),
         actions: [
           PopupMenuButton(
             onSelected: (value) {
+              ShoppingList shoppingList = objectbox.shoppingListBox
+                  .get(widget.shoppingListId) as ShoppingList;
               if (value == 'delete') {
                 // Pop route
                 Navigator.of(context).pop();
                 // Delete shopping items
-                if (_shoppingList.shoppingItems.isNotEmpty) {
-                  for (var shoppingItem in _shoppingList.shoppingItems) {
+                if (shoppingList.shoppingItems.isNotEmpty) {
+                  for (var shoppingItem in shoppingList.shoppingItems) {
                     objectbox.shoppingItemBox.remove(shoppingItem.id);
                   }
                 }
                 // Delete shopping list
-                objectbox.shoppingListBox.remove(_shoppingList.id);
+                objectbox.shoppingListBox.remove(shoppingList.id);
               }
             },
             itemBuilder: (context) => [
@@ -83,7 +87,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
               barrierColor: Colors.black.withOpacity(0.5),
               barrierDismissible: true,
               pageBuilder: (_, __, ___) => AddShoppingItem(
-                shoppingListId: _shoppingList.id,
+                shoppingListId: widget.shoppingListId,
               ),
             ),
           );
@@ -164,7 +168,10 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                                             '${shoppingItem.checked ? 'Uncheck' : 'Check'} shopping item',
                                         child: Checkbox(
                                           onChanged: (value) {
-                                            toggleCheck(shoppingItem);
+                                            toggleCheck(
+                                                shoppingItem,
+                                                shoppingListSnapshot
+                                                    .data!.first);
                                           },
                                           value: shoppingItem.checked,
                                         ),
@@ -179,7 +186,8 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                                         shoppingItem.name,
                                       ),
                                       onTap: () {
-                                        toggleCheck(shoppingItem);
+                                        toggleCheck(shoppingItem,
+                                            shoppingListSnapshot.data!.first);
                                       },
                                       trailing: Row(
                                         mainAxisSize: MainAxisSize.min,
@@ -191,8 +199,9 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                                               objectbox.shoppingItemBox
                                                   .put(shoppingItem);
 
-                                              objectbox.shoppingListBox
-                                                  .put(_shoppingList);
+                                              objectbox.shoppingListBox.put(
+                                                  shoppingListSnapshot
+                                                      .data!.first);
                                             },
                                             icon: const Icon(Icons.add),
                                           ),
@@ -207,8 +216,9 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                                                 objectbox.shoppingItemBox
                                                     .put(shoppingItem);
 
-                                                objectbox.shoppingListBox
-                                                    .put(_shoppingList);
+                                                objectbox.shoppingListBox.put(
+                                                    shoppingListSnapshot
+                                                        .data!.first);
                                               }
                                             },
                                             icon: const Icon(Icons.remove),
@@ -308,12 +318,12 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
   }
 
   /// Checks or unchecks shoppingItems
-  void toggleCheck(ShoppingItem shoppingItem) {
+  void toggleCheck(ShoppingItem shoppingItem, ShoppingList shoppingList) {
     // Allows ObjectBox to update shoppingItem with the same ID
     shoppingItem.checked = !shoppingItem.checked;
     objectbox.shoppingItemBox.put(shoppingItem);
 
     // Forces StreamBuilder to rebuild since it depends on a ShoppingList Stream
-    objectbox.shoppingListBox.put(_shoppingList);
+    objectbox.shoppingListBox.put(shoppingList);
   }
 }

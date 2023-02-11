@@ -51,7 +51,7 @@ class HomeScreen extends StatelessWidget {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: ((context) => ShoppingListScreen(
-                                  shoppingList: snapshot.data![index],
+                                  shoppingListId: snapshot.data![index].id,
                                 )),
                           ),
                         );
