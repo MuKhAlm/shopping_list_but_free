@@ -20,6 +20,10 @@ class ShoppingListScreen extends StatefulWidget {
 }
 
 class _ShoppingListScreenState extends State<ShoppingListScreen> {
+  /// Relevant Collections to ShoppingList with [widget.shoppingListId] from the previous build
+  List<Collection> _prevRelevantCollections = [];
+  int _count = 0;
+
   late final Stream<List<ShoppingList>> _shoppingListStream = objectbox
       .shoppingListBox
       .query(ShoppingList_.id.equals(widget.shoppingListId))
@@ -128,6 +132,25 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
               final ShoppingList shoppingList =
                   shoppingListSnapshot.data!.first;
 
+              /// List of Collections relevant to [shoppingList]
+              final List<Collection> relevantCollections = collectionsSnapshot
+                  .data!
+                  .where((Collection collection) => collection
+                      .shoppingItemsNames
+                      .any((String shoppingItemName) => shoppingList
+                          .shoppingItems
+                          .map((ShoppingItem shoppingItem) =>
+                              shoppingItem.name.toLowerCase())
+                          .contains(shoppingItemName)))
+                  .toList();
+
+              // Generates a new key for ExpansionPanelList if the relevant Collections has changed size
+              if (_prevRelevantCollections.length !=
+                  relevantCollections.length) {
+                _count++;
+                _prevRelevantCollections = List.of(relevantCollections);
+              }
+
               return ListView(
                 children: [
                   ExpansionPanelList(
@@ -139,14 +162,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                       });
                     },
                     // Relevant collections
-                    children: collectionsSnapshot.data!
-                        .where((Collection collection) => collection
-                            .shoppingItemsNames
-                            .any((String shoppingItemName) => shoppingList
-                                .shoppingItems
-                                .map((ShoppingItem shoppingItem) =>
-                                    shoppingItem.name.toLowerCase())
-                                .contains(shoppingItemName)))
+                    children: relevantCollections
                         .map(
                           (Collection collection) => ExpansionPanel(
                             canTapOnHeader: true,
