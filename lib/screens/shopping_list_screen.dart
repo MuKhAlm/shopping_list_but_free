@@ -191,151 +191,155 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                               );
                             },
                             body: Column(
-                              // Relevant ShoppingItems for each Collection
-                              children: shoppingList.shoppingItems
-                                  .where((ShoppingItem shoppingItem) =>
-                                      collection.shoppingItemsNames.contains(
-                                          shoppingItem.name.toLowerCase()))
-                                  .map(
-                                    (ShoppingItem shoppingItem) => ListTile(
-                                      leading: Tooltip(
-                                        message:
-                                            '${shoppingItem.checked ? 'Uncheck' : 'Check'} shopping item',
-                                        child: Checkbox(
-                                          onChanged: (value) {
-                                            toggleCheck(
-                                                shoppingItem, shoppingList);
-                                          },
-                                          value: shoppingItem.checked,
-                                        ),
-                                      ),
-                                      title: Text(
-                                        style: shoppingItem.checked
-                                            ? const TextStyle(
-                                                decoration:
-                                                    TextDecoration.lineThrough,
-                                              )
-                                            : null,
-                                        shoppingItem.name,
-                                      ),
-                                      onTap: () {
-                                        toggleCheck(shoppingItem, shoppingList);
-                                      },
-                                      trailing: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          IconButton(
-                                            tooltip: 'Increase quantity',
-                                            onPressed: () {
-                                              shoppingItem.quantity++;
-                                              objectbox.shoppingItemBox
-                                                  .put(shoppingItem);
-
-                                              objectbox.shoppingListBox
-                                                  .put(shoppingList);
+                                // Relevant ShoppingItems for each Collection
+                                children: shoppingList.shoppingItems
+                                    .where((ShoppingItem shoppingItem) =>
+                                        collection.shoppingItemsNames.contains(
+                                            shoppingItem.name.toLowerCase()))
+                                    .map(
+                                      (ShoppingItem shoppingItem) => ListTile(
+                                        leading: Tooltip(
+                                          message:
+                                              '${shoppingItem.checked ? 'Uncheck' : 'Check'} shopping item',
+                                          child: Checkbox(
+                                            onChanged: (value) {
+                                              toggleCheck(
+                                                  shoppingItem, shoppingList);
                                             },
-                                            icon: const Icon(Icons.add),
+                                            value: shoppingItem.checked,
                                           ),
-                                          Text(
-                                            shoppingItem.quantity.toString(),
-                                          ),
-                                          IconButton(
-                                            tooltip: 'Decrease quantity',
-                                            onPressed: () {
-                                              if (shoppingItem.quantity > 1) {
-                                                shoppingItem.quantity--;
+                                        ),
+                                        title: Text(
+                                          style: shoppingItem.checked
+                                              ? const TextStyle(
+                                                  decoration: TextDecoration
+                                                      .lineThrough,
+                                                )
+                                              : null,
+                                          shoppingItem.name,
+                                        ),
+                                        onTap: () {
+                                          toggleCheck(
+                                              shoppingItem, shoppingList);
+                                        },
+                                        trailing: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            IconButton(
+                                              tooltip: 'Increase quantity',
+                                              onPressed: () {
+                                                shoppingItem.quantity++;
                                                 objectbox.shoppingItemBox
                                                     .put(shoppingItem);
 
                                                 objectbox.shoppingListBox
                                                     .put(shoppingList);
-                                              }
-                                            },
-                                            icon: const Icon(Icons.remove),
-                                          ),
-                                          PopupMenuButton(
-                                            tooltip: 'Shopping item options',
-                                            onSelected: (value) {
-                                              if (value == 'delete') {
-                                                // Remove shopping item from shopping list
-                                                shoppingList.shoppingItems
-                                                    .remove(shoppingItem);
-                                                // Put new shopping list in obx
-                                                objectbox.shoppingListBox
-                                                    .put(shoppingList);
-                                                // Remove shopping item form obx
-                                                objectbox.shoppingItemBox
-                                                    .remove(shoppingItem.id);
-                                              }
+                                              },
+                                              icon: const Icon(Icons.add),
+                                            ),
+                                            Text(
+                                              shoppingItem.quantity.toString(),
+                                            ),
+                                            IconButton(
+                                              tooltip: 'Decrease quantity',
+                                              onPressed: () {
+                                                if (shoppingItem.quantity > 1) {
+                                                  shoppingItem.quantity--;
+                                                  objectbox.shoppingItemBox
+                                                      .put(shoppingItem);
 
-                                              if (value ==
-                                                  'change collection') {
-                                                Navigator.of(context).push(
-                                                  PageRouteBuilder(
-                                                    opaque: false,
-                                                    barrierColor: Colors.black
-                                                        .withOpacity(0.5),
-                                                    barrierDismissible: true,
-                                                    pageBuilder: (_, __, ___) =>
-                                                        ChangeCollection(
-                                                      shoppingItem:
-                                                          shoppingItem,
+                                                  objectbox.shoppingListBox
+                                                      .put(shoppingList);
+                                                }
+                                              },
+                                              icon: const Icon(Icons.remove),
+                                            ),
+                                            PopupMenuButton(
+                                              tooltip: 'Shopping item options',
+                                              onSelected: (value) {
+                                                if (value == 'delete') {
+                                                  // Remove shopping item from shopping list
+                                                  shoppingList.shoppingItems
+                                                      .remove(shoppingItem);
+                                                  // Put new shopping list in obx
+                                                  objectbox.shoppingListBox
+                                                      .put(shoppingList);
+                                                  // Remove shopping item form obx
+                                                  objectbox.shoppingItemBox
+                                                      .remove(shoppingItem.id);
+                                                }
+
+                                                if (value ==
+                                                    'change collection') {
+                                                  Navigator.of(context).push(
+                                                    PageRouteBuilder(
+                                                      opaque: false,
+                                                      barrierColor: Colors.black
+                                                          .withOpacity(0.5),
+                                                      barrierDismissible: true,
+                                                      pageBuilder:
+                                                          (_, __, ___) =>
+                                                              ChangeCollection(
+                                                        shoppingItem:
+                                                            shoppingItem,
+                                                      ),
                                                     ),
+                                                  );
+                                                }
+                                              },
+                                              itemBuilder: (context) => [
+                                                PopupMenuItem(
+                                                  value: 'change collection',
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: const [
+                                                      Icon(
+                                                        Icons.edit,
+                                                      ),
+                                                      SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      Text(
+                                                        'Change\nCollection',
+                                                        softWrap: true,
+                                                      ),
+                                                    ],
                                                   ),
-                                                );
-                                              }
-                                            },
-                                            itemBuilder: (context) => [
-                                              PopupMenuItem(
-                                                value: 'change collection',
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: const [
-                                                    Icon(
-                                                      Icons.edit,
-                                                    ),
-                                                    SizedBox(
-                                                      width: 10,
-                                                    ),
-                                                    Text(
-                                                      'Change\nCollection',
-                                                      softWrap: true,
-                                                    ),
-                                                  ],
                                                 ),
-                                              ),
-                                              PopupMenuItem(
-                                                value: 'delete',
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: const [
-                                                    Icon(
-                                                      Icons
-                                                          .delete_forever_outlined,
-                                                    ),
-                                                    SizedBox(
-                                                      width: 10,
-                                                    ),
-                                                    Text(
-                                                      'Delete',
-                                                    ),
-                                                  ],
+                                                PopupMenuItem(
+                                                  value: 'delete',
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: const [
+                                                      Icon(
+                                                        Icons
+                                                            .delete_forever_outlined,
+                                                      ),
+                                                      SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      Text(
+                                                        'Delete',
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  )
-                                  .toList(),
-                            ),
+                                    )
+                                    .toList()),
                           ),
                         )
                         .toList(),
                   ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height / 10,
+                  )
                 ],
               );
             },
