@@ -7,6 +7,7 @@ import 'package:shopping_list_but_free/objectbox.dart';
 import 'package:shopping_list_but_free/objectbox.g.dart';
 import 'package:shopping_list_but_free/widgets/add_shopping_item.dart';
 import 'package:shopping_list_but_free/widgets/change_collection.dart';
+import 'package:shopping_list_but_free/widgets/change_collection_name.dart';
 
 class ShoppingListScreen extends StatefulWidget {
   final int shoppingListId;
@@ -196,6 +197,16 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                                             .shoppingListBox
                                             .get(widget.shoppingListId)
                                         as ShoppingList;
+                                    if (value == 'change name') {
+                                      Navigator.of(context).push(
+                                        PageRouteBuilder(
+                                            opaque: false,
+                                            pageBuilder: (_, __, ___) =>
+                                                ChangeCollectionName(
+                                                    collectionId:
+                                                        collection.id)),
+                                      );
+                                    }
                                     if (value == 'remove') {
                                       // Only ShoppingItems in collection
                                       final List<ShoppingItem> shoppingItems =
@@ -221,13 +232,39 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                                   },
                                   itemBuilder: (context) => [
                                     PopupMenuItem(
-                                      value: 'remove',
+                                      value: 'change name',
                                       child: Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
+                                            MainAxisAlignment.start,
                                         children: const [
-                                          Icon(Icons.delete_forever_outlined),
-                                          Text('Remove'),
+                                          Icon(
+                                            Icons.edit,
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            'Change\nName',
+                                            softWrap: true,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    PopupMenuItem(
+                                      value: 'delete',
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: const [
+                                          Icon(
+                                            Icons.delete_forever_outlined,
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            'Delete',
+                                          ),
                                         ],
                                       ),
                                     ),
