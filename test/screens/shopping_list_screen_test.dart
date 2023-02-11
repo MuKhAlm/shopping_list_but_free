@@ -677,6 +677,88 @@ void main() async {
           );
 
           testWidgets(
+            'Gets deleted when swiped right',
+            (tester) async {
+              shoppingList = ShoppingList(name: 'Test Shopping List');
+              final ShoppingItem shoppingItem =
+                  ShoppingItem(name: 'Test Shopping Item');
+              shoppingList.shoppingItems.add(shoppingItem);
+
+              final Collection collection = Collection(name: 'Test Collection');
+              collection.shoppingItemsNames.add('test shopping item');
+
+              setUp(() {
+                objectbox.shoppingListBox.put(shoppingList);
+                objectbox.collectionBox.put(collection);
+              });
+
+              await tester.pumpWidget(getShoppingListScreen());
+              await tester.pumpAndSettle();
+
+              // Test for presence of shoppingItem
+              expect(find.text('Test Shopping List'), findsOneWidget);
+
+              // Swipe right
+              await tester.drag(
+                  find.text('Test Shopping Item'), const Offset(1000, 0));
+              await tester.pumpAndSettle();
+
+              // Rebuild StreamBuilder
+              await tester.runAsync(
+                () async {
+                  await Future.delayed(const Duration(seconds: 1));
+
+                  await tester.pumpAndSettle();
+
+                  // Test for absence of shoppingItem
+                  expect(find.text('Test Shopping Item'), findsNothing);
+                },
+              );
+            },
+          );
+
+          testWidgets(
+            'Gets deleted when swiped left',
+            (tester) async {
+              shoppingList = ShoppingList(name: 'Test Shopping List');
+              final ShoppingItem shoppingItem =
+                  ShoppingItem(name: 'Test Shopping Item');
+              shoppingList.shoppingItems.add(shoppingItem);
+
+              final Collection collection = Collection(name: 'Test Collection');
+              collection.shoppingItemsNames.add('test shopping item');
+
+              setUp(() {
+                objectbox.shoppingListBox.put(shoppingList);
+                objectbox.collectionBox.put(collection);
+              });
+
+              await tester.pumpWidget(getShoppingListScreen());
+              await tester.pumpAndSettle();
+
+              // Test for presence of shoppingItem
+              expect(find.text('Test Shopping List'), findsOneWidget);
+
+              // Swipe left
+              await tester.drag(
+                  find.text('Test Shopping Item'), const Offset(-1000, 0));
+              await tester.pumpAndSettle();
+
+              // Rebuild StreamBuilder
+              await tester.runAsync(
+                () async {
+                  await Future.delayed(const Duration(seconds: 1));
+
+                  await tester.pumpAndSettle();
+
+                  // Test for absence of shoppingItem
+                  expect(find.text('Test Shopping Item'), findsNothing);
+                },
+              );
+            },
+          );
+
+          testWidgets(
             'Display options menu',
             (tester) async {
               shoppingList = ShoppingList(name: 'Test Shopping List');
