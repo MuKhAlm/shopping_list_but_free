@@ -187,7 +187,52 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                                     as bool,
                             headerBuilder: (context, isExpanded) {
                               return ListTile(
+                                contentPadding: const EdgeInsets.only(left: 20),
                                 title: Text(collection.name),
+                                trailing: PopupMenuButton(
+                                  tooltip: 'Collection options',
+                                  onSelected: (value) {
+                                    ShoppingList shoppingList = objectbox
+                                            .shoppingListBox
+                                            .get(widget.shoppingListId)
+                                        as ShoppingList;
+                                    if (value == 'remove') {
+                                      // Only ShoppingItems in collection
+                                      final List<ShoppingItem> shoppingItems =
+                                          shoppingList.shoppingItems
+                                              .where((shoppingItem) =>
+                                                  collection.shoppingItemsNames
+                                                      .contains(shoppingItem
+                                                          .name
+                                                          .toLowerCase()))
+                                              .toList();
+
+                                      // Remove each ShoppingItem from shoppingList
+                                      for (ShoppingItem shoppingItem
+                                          in shoppingItems) {
+                                        shoppingList.shoppingItems.removeWhere(
+                                            (si) => si.id == shoppingItem.id);
+                                      }
+
+                                      // Update obx
+                                      objectbox.shoppingListBox
+                                          .put(shoppingList);
+                                    }
+                                  },
+                                  itemBuilder: (context) => [
+                                    PopupMenuItem(
+                                      value: 'remove',
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: const [
+                                          Icon(Icons.delete_forever_outlined),
+                                          Text('Remove'),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               );
                             },
                             body: Column(
