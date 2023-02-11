@@ -83,7 +83,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
       ),
       drawer: const Drawer(),
       floatingActionButton: FloatingActionButton(
-        tooltip: 'Add a new shopping list',
+        tooltip: 'Add a new shopping item',
         onPressed: () {
           Navigator.of(context).push(
             PageRouteBuilder(
