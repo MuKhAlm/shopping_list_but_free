@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shopping_list_but_free/screens/about_screen.dart';
+import 'package:shopping_list_but_free/screens/collections_screen.dart';
+import 'package:shopping_list_but_free/screens/home_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MainNavigationDrawer extends StatelessWidget {
   const MainNavigationDrawer({Key? key}) : super(key: key);
@@ -12,8 +16,8 @@ class MainNavigationDrawer extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(
-            children: const [
-              DrawerHeader(
+            children: [
+              const DrawerHeader(
                 child: Center(
                   child: Text(
                     'Navigation Menu',
@@ -22,30 +26,63 @@ class MainNavigationDrawer extends StatelessWidget {
                 ),
               ),
               ListTile(
-                leading: Icon(Icons.home_sharp),
-                title: Text('Home'),
+                leading: const Icon(Icons.home_sharp),
+                title: const Text('Home'),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => HomeScreen(),
+                    ),
+                  );
+                },
               ),
               ListTile(
-                leading: Icon(Icons.square_outlined),
-                title: Text('Collections'),
+                leading: const Icon(Icons.square_outlined),
+                title: const Text('Collections'),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const CollectionsScreen(),
+                    ),
+                  );
+                },
               ),
             ],
           ),
           Column(
-            children: const [
-              Divider(),
+            children: [
+              const Divider(),
               ListTile(
-                leading: Icon(Icons.info_outline),
-                title: Text('About'),
+                leading: const Icon(Icons.info_outline),
+                title: const Text('About'),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const AboutScreen(),
+                    ),
+                  );
+                },
               ),
               ListTile(
-                leading: FaIcon(FontAwesomeIcons.github),
-                title: Text('Source Code'),
+                leading: const FaIcon(FontAwesomeIcons.github),
+                title: const Text('Source Code'),
+                onTap: _launchSouceCodeUrl,
               ),
             ],
           ),
         ],
       ),
     );
+  }
+
+  Future<void> _launchSouceCodeUrl() async {
+    Uri url =
+        Uri.parse('https://github.com/MuKhAlt/shopping_list_but_free.git');
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw Exception('Could not launch $url');
+    }
   }
 }
