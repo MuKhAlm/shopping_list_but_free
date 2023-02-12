@@ -1,5 +1,5 @@
-import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 import 'package:shopping_list_but_free/models/collection.dart';
 import 'package:shopping_list_but_free/models/shopping_item.dart';
 import 'package:shopping_list_but_free/models/shopping_list.dart';
@@ -40,6 +40,7 @@ class ObjectBox {
       collectionBox.put(collection1);
       collectionBox.put(collection2);
       collectionBox.put(Collection(name: 'Collection 3'));
+      collectionBox.put(Collection(name: 'Others'));
     }
 
     if (shoppingListBox.isEmpty()) {

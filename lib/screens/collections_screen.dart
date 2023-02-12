@@ -1,7 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shopping_list_but_free/models/collection.dart';
+import 'package:shopping_list_but_free/models/shopping_item.dart';
+import 'package:shopping_list_but_free/models/shopping_list.dart';
 import 'package:shopping_list_but_free/objectbox.dart';
+import 'package:shopping_list_but_free/objectbox.g.dart';
 import 'package:shopping_list_but_free/widgets/main_navigation_drawer.dart';
 
 class CollectionsScreen extends StatefulWidget {
@@ -95,6 +98,37 @@ class _CollectionsScreenState extends State<CollectionsScreen> {
                           .map((String shoppingItemName) {
                         return ListTile(
                           title: Text(shoppingItemName),
+                          trailing: IconButton(
+                            onPressed: () {
+                              // Delete shoppingItemName from collection and move it to Others
+                              // if there are ShoppingItem with given name
+                              // This is because some ShoppingLists might still
+                              // contain a ShoppingItem with the given name
+                              collection.shoppingItemsNames
+                                  .remove(shoppingItemName);
+
+                              ShoppingItem;
+
+                              List<ShoppingList> shoppingLists =
+                                  objectbox.shoppingListBox.getAll();
+                              if (shoppingLists.any(
+                                  (ShoppingList shoppingList) => shoppingList
+                                      .shoppingItems
+                                      .map((ShoppingItem shoppingItem) =>
+                                          shoppingItem.name.toLowerCase())
+                                      .contains(shoppingItemName))) {
+                                Collection others = objectbox.collectionBox
+                                    .query(Collection_.name.equals('Others'))
+                                    .build()
+                                    .findFirst() as Collection;
+                                others.shoppingItemsNames.add(shoppingItemName);
+                                objectbox.collectionBox.put(others);
+                              }
+
+                              objectbox.collectionBox.put(collection);
+                            },
+                            icon: const Icon(Icons.delete_forever_outlined),
+                          ),
                         );
                       }).toList(),
                     ),
