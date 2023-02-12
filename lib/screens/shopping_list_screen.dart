@@ -8,6 +8,7 @@ import 'package:shopping_list_but_free/objectbox.g.dart';
 import 'package:shopping_list_but_free/widgets/add_shopping_item.dart';
 import 'package:shopping_list_but_free/widgets/change_collection.dart';
 import 'package:shopping_list_but_free/widgets/change_collection_name.dart';
+import 'package:shopping_list_but_free/widgets/main_navigation_drawer.dart';
 
 class ShoppingListScreen extends StatefulWidget {
   final int shoppingListId;
@@ -83,7 +84,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
           ),
         ],
       ),
-      drawer: const Drawer(),
+      drawer: const MainNavigationDrawer(),
       floatingActionButton: FloatingActionButton(
         tooltip: 'Add a new shopping item',
         onPressed: () {
