@@ -11,6 +11,10 @@ class CollectionsScreen extends StatefulWidget {
 }
 
 class _CollectionsScreenState extends State<CollectionsScreen> {
+  /// Collections from the previous build
+  List<Collection> _prevCollections = [];
+  int _count = 0;
+
   late final Stream<List<Collection>> _collectionStream = objectbox
       .collectionBox
       .query()
@@ -36,9 +40,16 @@ class _CollectionsScreenState extends State<CollectionsScreen> {
           final List<Collection> collections =
               collectionsSnapshot.data as List<Collection>;
 
+          // Generates a new key for ExpansionPanelList if the relevant Collections has changed size
+          if (_prevCollections.length != collections.length) {
+            _count++;
+            _prevCollections = List.of(collections);
+          }
+
           return ListView(
             children: [
               ExpansionPanelList(
+                key: Key('$_count'),
                 children: collections.map((Collection collection) {
                   return ExpansionPanel(
                     isExpanded: true,
