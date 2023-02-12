@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shopping_list_but_free/models/collection.dart';
 import 'package:shopping_list_but_free/objectbox.dart';
@@ -14,6 +15,9 @@ class _CollectionsScreenState extends State<CollectionsScreen> {
   /// Collections from the previous build
   List<Collection> _prevCollections = [];
   int _count = 0;
+
+  /// Expansion state of each Collection added to this Widget
+  final Map<int, bool> _collectionsExpansionState = {};
 
   late final Stream<List<Collection>> _collectionStream = objectbox
       .collectionBox
@@ -40,6 +44,23 @@ class _CollectionsScreenState extends State<CollectionsScreen> {
           final List<Collection> collections =
               collectionsSnapshot.data as List<Collection>;
 
+          // Only init _collectionsExpansionState if the Collections in
+          // relevantCollections and _collectionsExpansionState are different
+          List<int> prevCollectionsIds = _prevCollections
+              .map((Collection collection) => collection.id)
+              .toList();
+          List<int> collectionsIds = collections
+              .map((Collection collection) => collection.id)
+              .toList();
+          if (!listEquals(prevCollectionsIds, collectionsIds)) {
+            for (int id in collectionsIds) {
+              // only init isExpanded if the Collection is different
+              if (_collectionsExpansionState[id] == null) {
+                _collectionsExpansionState[id] = true;
+              }
+            }
+          }
+
           // Generates a new key for ExpansionPanelList if the relevant Collections has changed size
           if (_prevCollections.length != collections.length) {
             _count++;
@@ -50,9 +71,20 @@ class _CollectionsScreenState extends State<CollectionsScreen> {
             children: [
               ExpansionPanelList(
                 key: Key('$_count'),
+                expansionCallback: (panelIndex, isExpanded) {
+                  final Collection collection = collections[panelIndex];
+
+                  // Reverse the expansion state of corresponding collection panel
+                  setState(() {
+                    _collectionsExpansionState[collection.id] =
+                        !(_collectionsExpansionState[collection.id] as bool);
+                  });
+                },
                 children: collections.map((Collection collection) {
                   return ExpansionPanel(
-                    isExpanded: true,
+                    canTapOnHeader: true,
+                    isExpanded:
+                        _collectionsExpansionState[collection.id] as bool,
                     headerBuilder: (context, isExpanded) {
                       return ListTile(
                         title: Text(collection.name),
