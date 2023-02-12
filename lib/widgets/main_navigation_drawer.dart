@@ -66,7 +66,7 @@ class MainNavigationDrawer extends StatelessWidget {
               ListTile(
                 leading: const FaIcon(FontAwesomeIcons.github),
                 title: const Text('Source Code'),
-                onTap: _launchSouceCodeUrl,
+                onTap: _launchSourceCodeUrl,
               ),
             ],
           ),
@@ -75,7 +75,7 @@ class MainNavigationDrawer extends StatelessWidget {
     );
   }
 
-  Future<void> _launchSouceCodeUrl() async {
+  Future<void> _launchSourceCodeUrl() async {
     Uri url =
         Uri.parse('https://github.com/MuKhAlt/shopping_list_but_free.git');
     if (!await launchUrl(
