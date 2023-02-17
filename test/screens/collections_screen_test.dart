@@ -214,6 +214,114 @@ void main() async {
                   expect(find.text('Delete'), findsOneWidget);
                 },
               );
+
+              group(
+                'When Delete option is pressed',
+                () {
+                  testWidgets(
+                    'Deletes collection from db',
+                    (tester) async {
+                      final testCollection1 =
+                          Collection(name: 'Test Collection 1');
+                      final testOthers = Collection(name: 'Others');
+
+                      // Setup obx
+                      dbSetup(() {
+                        objectbox.collectionBox.put(testCollection1);
+                        objectbox.collectionBox.put(testOthers);
+                      });
+
+                      // Setup widget
+                      await tester.pumpWidget(getCollectionsScreen());
+                      await tester.pumpAndSettle();
+
+                      // Tap options menu
+                      await tester
+                          .tap(find.byTooltip('Collection options').first);
+                      await tester.pumpAndSettle();
+
+                      // Test for Collection in obx
+                      expect(
+                          objectbox.collectionBox.get(testCollection1.id) ==
+                              null,
+                          false);
+
+                      // Tap Delete option
+                      await tester.tap(find.text('Delete'));
+                      await tester.pumpAndSettle();
+
+                      // Test for Collection in obx
+                      expect(objectbox.collectionBox.get(testCollection1.id),
+                          null);
+                    },
+                  );
+
+                  testWidgets(
+                    """"'Deletes collection from db and adds shopping item names
+                    which there is a ShoppingItem with the same name in a 
+                    ShoppingList to the Others Collection""",
+                    (tester) async {
+                      final testShoppingItem1 =
+                          ShoppingItem(name: 'Test Shopping Item 1');
+
+                      final testShoppingList1 =
+                          ShoppingList(name: 'Test Shopping List 1');
+
+                      testShoppingList1.shoppingItems.add(testShoppingItem1);
+
+                      final testCollection1 =
+                          Collection(name: 'Test Collection 1');
+                      final testOthers = Collection(name: 'Others');
+
+                      testCollection1.shoppingItemsNames
+                          .add(testShoppingItem1.name.toLowerCase());
+                      testCollection1.shoppingItemsNames
+                          .add('test shopping item 2');
+
+                      // Setup obx
+                      dbSetup(() {
+                        objectbox.shoppingListBox.put(testShoppingList1);
+                        objectbox.collectionBox.put(testCollection1);
+                        objectbox.collectionBox.put(testOthers);
+                      });
+
+                      // Setup widget
+                      await tester.pumpWidget(getCollectionsScreen());
+                      await tester.pumpAndSettle();
+
+                      // Tap options menu
+                      await tester
+                          .tap(find.byTooltip('Collection options').first);
+                      await tester.pumpAndSettle();
+
+                      // Test for shoppingItemNames in Others Collection
+                      expect(
+                          objectbox.collectionBox
+                              .get(testOthers.id)!
+                              .shoppingItemsNames
+                              .isEmpty,
+                          true);
+
+                      // Tap Delete option
+                      await tester.tap(find.text('Delete'));
+                      await tester.pumpAndSettle();
+
+                      // Test for shoppingItemNames in Others Collection
+                      expect(
+                          objectbox.collectionBox
+                              .get(testOthers.id)!
+                              .shoppingItemsNames[0],
+                          testShoppingItem1.name.toLowerCase());
+                      expect(
+                          objectbox.collectionBox
+                              .get(testOthers.id)!
+                              .shoppingItemsNames
+                              .length,
+                          1);
+                    },
+                  );
+                },
+              );
             },
           );
 
