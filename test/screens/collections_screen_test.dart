@@ -7,6 +7,7 @@ import 'package:shopping_list_but_free/models/shopping_item.dart';
 import 'package:shopping_list_but_free/models/shopping_list.dart';
 import 'package:shopping_list_but_free/objectbox.dart';
 import 'package:shopping_list_but_free/screens/collections_screen.dart';
+import 'package:shopping_list_but_free/widgets/change_collection_name.dart';
 
 void main() async {
   // Initialize objectbox
@@ -212,6 +213,36 @@ void main() async {
                   // Test for options
                   expect(find.text('Change\nName'), findsOneWidget);
                   expect(find.text('Delete'), findsOneWidget);
+                },
+              );
+
+              testWidgets(
+                'Display ChangeCollectionName Widget when Change Name option is pressed',
+                (tester) async {
+                  final testCollection1 = Collection(name: 'Test Collection 1');
+
+                  // Setup obx
+                  dbSetup(() {
+                    objectbox.collectionBox.put(testCollection1);
+                  });
+
+                  // Setup widget
+                  await tester.pumpWidget(getCollectionsScreen());
+                  await tester.pumpAndSettle();
+
+                  // Tap options menu
+                  await tester.tap(find.byTooltip('Collection options'));
+                  await tester.pumpAndSettle();
+
+                  // Test for ChangeCollectionName
+                  expect(find.byType(ChangeCollectionName), findsNothing);
+
+                  // Tap Change Name option
+                  await tester.tap(find.text('Change\nName'));
+                  await tester.pumpAndSettle();
+
+                  // Test for ChangeCollectionName
+                  expect(find.byType(ChangeCollectionName), findsOneWidget);
                 },
               );
 
