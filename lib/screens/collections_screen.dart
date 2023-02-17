@@ -94,7 +94,18 @@ class _CollectionsScreenState extends State<CollectionsScreen> {
                         title: Text(collection.name),
                         trailing: PopupMenuButton(
                           tooltip: 'Collection options',
-                          onSelected: (value) {},
+                          onSelected: (value) {
+                            if (value == 'delete') {
+                              // Remove each shoppingItemName from collection
+                              for (String shoppingItemName
+                                  in collection.shoppingItemsNames) {
+                                _addToOthers(shoppingItemName);
+                              }
+
+                              // Remove collection from obx
+                              objectbox.collectionBox.remove(collection.id);
+                            }
+                          },
                           itemBuilder: (context) => [
                             PopupMenuItem(
                               value: 'change name',
@@ -153,21 +164,7 @@ class _CollectionsScreenState extends State<CollectionsScreen> {
 
                               ShoppingItem;
 
-                              List<ShoppingList> shoppingLists =
-                                  objectbox.shoppingListBox.getAll();
-                              if (shoppingLists.any(
-                                  (ShoppingList shoppingList) => shoppingList
-                                      .shoppingItems
-                                      .map((ShoppingItem shoppingItem) =>
-                                          shoppingItem.name.toLowerCase())
-                                      .contains(shoppingItemName))) {
-                                Collection others = objectbox.collectionBox
-                                    .query(Collection_.name.equals('Others'))
-                                    .build()
-                                    .findFirst() as Collection;
-                                others.shoppingItemsNames.add(shoppingItemName);
-                                objectbox.collectionBox.put(others);
-                              }
+                              _addToOthers(shoppingItemName);
 
                               objectbox.collectionBox.put(collection);
                             },
@@ -187,5 +184,22 @@ class _CollectionsScreenState extends State<CollectionsScreen> {
         },
       ),
     );
+  }
+
+  /// Adds [shoppingItemName] to the **Others** **Collection** if a
+  /// **ShoppingItem** with the same name exists in a **ShoppingList**
+  void _addToOthers(String shoppingItemName) {
+    List<ShoppingList> shoppingLists = objectbox.shoppingListBox.getAll();
+    if (shoppingLists.any((ShoppingList shoppingList) => shoppingList
+        .shoppingItems
+        .map((ShoppingItem shoppingItem) => shoppingItem.name.toLowerCase())
+        .contains(shoppingItemName))) {
+      Collection others = objectbox.collectionBox
+          .query(Collection_.name.equals('Others'))
+          .build()
+          .findFirst() as Collection;
+      others.shoppingItemsNames.add(shoppingItemName);
+      objectbox.collectionBox.put(others);
+    }
   }
 }
