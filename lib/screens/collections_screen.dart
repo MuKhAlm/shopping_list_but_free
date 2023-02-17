@@ -99,6 +99,8 @@ class _CollectionsScreenState extends State<CollectionsScreen> {
                         return ListTile(
                           title: Text(shoppingItemName),
                           trailing: IconButton(
+                            tooltip:
+                                'Remove shopping item name from collection',
                             onPressed: () {
                               // Delete shoppingItemName from collection and move it to Others
                               // if there are ShoppingItem with given name
