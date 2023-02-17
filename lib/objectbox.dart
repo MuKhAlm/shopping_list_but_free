@@ -24,6 +24,17 @@ class ObjectBox {
     collectionBox = Box<Collection>(_store);
 
     _addMockData();
+    _addOthersCollection();
+  }
+
+  void _addOthersCollection() {
+    if (collectionBox
+            .query(Collection_.name.equals('Others'))
+            .build()
+            .count() ==
+        0) {
+      collectionBox.put(Collection(name: 'Others'));
+    }
   }
 
   void _addMockData() {
@@ -40,7 +51,6 @@ class ObjectBox {
       collectionBox.put(collection1);
       collectionBox.put(collection2);
       collectionBox.put(Collection(name: 'Collection 3'));
-      collectionBox.put(Collection(name: 'Others'));
     }
 
     if (shoppingListBox.isEmpty()) {
