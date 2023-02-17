@@ -95,6 +95,16 @@ class _CollectionsScreenState extends State<CollectionsScreen> {
                         trailing: PopupMenuButton(
                           tooltip: 'Collection options',
                           onSelected: (value) {
+                            if (value == 'change name') {
+                              Navigator.of(context).push(
+                                PageRouteBuilder(
+                                  opaque: false,
+                                  pageBuilder: (_, __, ___) =>
+                                      ChangeCollectionName(
+                                          collectionId: collection.id),
+                                ),
+                              );
+                            }
                             if (value == 'delete') {
                               // Remove each shoppingItemName from collection
                               for (String shoppingItemName
