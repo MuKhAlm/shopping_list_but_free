@@ -5,6 +5,7 @@ import 'package:shopping_list_but_free/models/shopping_item.dart';
 import 'package:shopping_list_but_free/models/shopping_list.dart';
 import 'package:shopping_list_but_free/objectbox.dart';
 import 'package:shopping_list_but_free/objectbox.g.dart';
+import 'package:shopping_list_but_free/widgets/add_collection.dart';
 import 'package:shopping_list_but_free/widgets/add_shopping_item_name.dart';
 import 'package:shopping_list_but_free/widgets/change_collection_name.dart';
 import 'package:shopping_list_but_free/widgets/main_navigation_drawer.dart';
@@ -35,6 +36,18 @@ class _CollectionsScreenState extends State<CollectionsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Collections'),
+      ),
+      floatingActionButton: FloatingActionButton(
+        tooltip: 'Add a new collection',
+        onPressed: () {
+          Navigator.of(context).push(
+            PageRouteBuilder(
+              opaque: false,
+              pageBuilder: (_, __, ___) => const AddCollection(),
+            ),
+          );
+        },
+        child: const Icon(Icons.add),
       ),
       drawer: const MainNavigationDrawer(),
       body: StreamBuilder(
