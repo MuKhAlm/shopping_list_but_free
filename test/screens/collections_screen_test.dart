@@ -7,6 +7,7 @@ import 'package:shopping_list_but_free/models/shopping_item.dart';
 import 'package:shopping_list_but_free/models/shopping_list.dart';
 import 'package:shopping_list_but_free/objectbox.dart';
 import 'package:shopping_list_but_free/screens/collections_screen.dart';
+import 'package:shopping_list_but_free/widgets/add_collection.dart';
 import 'package:shopping_list_but_free/widgets/add_shopping_item_name.dart';
 import 'package:shopping_list_but_free/widgets/change_collection_name.dart';
 
@@ -537,6 +538,28 @@ void main() async {
           expect(find.text('test shopping item 3'), findsOneWidget);
           expect(find.text('test shopping item 4'), findsOneWidget);
           expect(find.text('test shopping item 5'), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'Displays FloatingActionButton that displays AddCollection Widget when pressed',
+        (tester) async {
+          // Setup obx
+          dbSetup(() {});
+
+          // Setup widget
+          await tester.pumpWidget(getCollectionsScreen());
+          await tester.pumpAndSettle();
+
+          // Test for AddCollection
+          expect(find.byType(AddCollection), findsNothing);
+
+          // Tap FloatingActionButton
+          await tester.tap(find.byTooltip('Add a new collection'));
+          await tester.pumpAndSettle();
+
+          // Test for AddCollection
+          expect(find.byType(AddCollection), findsOneWidget);
         },
       );
     },
