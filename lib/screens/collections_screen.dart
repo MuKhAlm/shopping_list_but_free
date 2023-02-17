@@ -90,7 +90,49 @@ class _CollectionsScreenState extends State<CollectionsScreen> {
                         _collectionsExpansionState[collection.id] as bool,
                     headerBuilder: (context, isExpanded) {
                       return ListTile(
+                        contentPadding: const EdgeInsets.only(left: 20),
                         title: Text(collection.name),
+                        trailing: PopupMenuButton(
+                          tooltip: 'Collection options',
+                          onSelected: (value) {},
+                          itemBuilder: (context) => [
+                            PopupMenuItem(
+                              value: 'change name',
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: const [
+                                  Icon(
+                                    Icons.edit,
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    'Change\nName',
+                                    softWrap: true,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            PopupMenuItem(
+                              value: 'delete',
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: const [
+                                  Icon(
+                                    Icons.delete_forever_outlined,
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    'Delete',
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       );
                     },
                     body: Column(
