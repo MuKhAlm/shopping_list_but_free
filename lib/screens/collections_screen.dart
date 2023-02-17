@@ -5,6 +5,8 @@ import 'package:shopping_list_but_free/models/shopping_item.dart';
 import 'package:shopping_list_but_free/models/shopping_list.dart';
 import 'package:shopping_list_but_free/objectbox.dart';
 import 'package:shopping_list_but_free/objectbox.g.dart';
+import 'package:shopping_list_but_free/widgets/add_shopping_item_name.dart';
+import 'package:shopping_list_but_free/widgets/change_collection_name.dart';
 import 'package:shopping_list_but_free/widgets/main_navigation_drawer.dart';
 
 class CollectionsScreen extends StatefulWidget {
@@ -95,6 +97,16 @@ class _CollectionsScreenState extends State<CollectionsScreen> {
                         trailing: PopupMenuButton(
                           tooltip: 'Collection options',
                           onSelected: (value) {
+                            if (value == 'add item') {
+                              Navigator.of(context).push(
+                                PageRouteBuilder(
+                                  opaque: false,
+                                  pageBuilder: (_, __, ___) =>
+                                      AddShoppingItemName(
+                                          collectionId: collection.id),
+                                ),
+                              );
+                            }
                             if (value == 'change name') {
                               Navigator.of(context).push(
                                 PageRouteBuilder(
@@ -117,6 +129,24 @@ class _CollectionsScreenState extends State<CollectionsScreen> {
                             }
                           },
                           itemBuilder: (context) => [
+                            PopupMenuItem(
+                              value: 'add item',
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: const [
+                                  Icon(
+                                    Icons.add,
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    'Add\nItem',
+                                    softWrap: true,
+                                  ),
+                                ],
+                              ),
+                            ),
                             PopupMenuItem(
                               value: 'change name',
                               child: Row(
