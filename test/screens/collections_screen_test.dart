@@ -170,6 +170,54 @@ void main() async {
           );
 
           group(
+            'Option Menu',
+            () {
+              testWidgets(
+                'Is displayed',
+                (tester) async {
+                  final testCollection1 = Collection(name: 'Test Collection 1');
+
+                  // Setup obx
+                  dbSetup(() {
+                    objectbox.collectionBox.put(testCollection1);
+                  });
+
+                  // Setup widget
+                  await tester.pumpWidget(getCollectionsScreen());
+                  await tester.pumpAndSettle();
+
+                  // Test for options menu
+                  expect(find.byTooltip('Collection options'), findsOneWidget);
+                },
+              );
+
+              testWidgets(
+                'Displays Change Name and Delete options',
+                (tester) async {
+                  final testCollection1 = Collection(name: 'Test Collection 1');
+
+                  // Setup obx
+                  dbSetup(() {
+                    objectbox.collectionBox.put(testCollection1);
+                  });
+
+                  // Setup widget
+                  await tester.pumpWidget(getCollectionsScreen());
+                  await tester.pumpAndSettle();
+
+                  // Tap options menu
+                  await tester.tap(find.byTooltip('Collection options'));
+                  await tester.pumpAndSettle();
+
+                  // Test for options
+                  expect(find.text('Change\nName'), findsOneWidget);
+                  expect(find.text('Delete'), findsOneWidget);
+                },
+              );
+            },
+          );
+
+          group(
             'Each shopping item name tile',
             () {
               testWidgets(
