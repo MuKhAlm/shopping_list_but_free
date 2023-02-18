@@ -63,6 +63,14 @@ class _CollectionsScreenState extends State<CollectionsScreen> {
           final List<Collection> collections =
               collectionsSnapshot.data as List<Collection>;
 
+          // Remove Others Collection
+          collections.removeWhere((collection) => collection.name == 'Others');
+
+          // Sort collections
+          collections.sort((a, b) {
+            return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+          });
+
           // Only init _collectionsExpansionState if the Collections in
           // relevantCollections and _collectionsExpansionState are different
           List<int> prevCollectionsIds = _prevCollections
