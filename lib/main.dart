@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_list_but_free/color_schemes.g.dart';
 import 'package:shopping_list_but_free/objectbox.dart';
 import 'package:shopping_list_but_free/screens/home_screen.dart';
 
@@ -20,7 +21,15 @@ class MyApp extends StatelessWidget {
       title: 'Shopping List But Free',
       theme: ThemeData(
         useMaterial3: true,
-        primarySwatch: Colors.blue,
+        colorScheme: lightColorScheme,
+        appBarTheme: const AppBarTheme(
+          centerTitle: true,
+          color: Color(0xFFD9FFEF),
+        ),
+      ),
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        colorScheme: darkColorScheme,
       ),
       debugShowCheckedModeBanner: false,
       home: HomeScreen(),
