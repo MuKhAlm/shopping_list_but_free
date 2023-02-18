@@ -71,13 +71,17 @@ class _AddEntityState extends State<AddEntity> {
                                   });
                                 },
                                 onFieldSubmitted: (value) {
-                                  widget.onSubmit(_newEntityName);
+                                  if (_newEntityName.trim().isNotEmpty) {
+                                    widget.onSubmit(_newEntityName);
+                                  }
                                 },
                               ),
                               IconButton(
                                 tooltip: 'Submit',
                                 onPressed: (() {
-                                  widget.onSubmit(_newEntityName);
+                                  if (_newEntityName.trim().isNotEmpty) {
+                                    widget.onSubmit(_newEntityName);
+                                  }
                                 }),
                                 icon: const Icon(
                                   Icons.done,
