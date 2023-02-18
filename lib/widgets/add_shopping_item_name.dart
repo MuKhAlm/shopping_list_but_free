@@ -27,7 +27,7 @@ class _AddShoppingItemNameState extends State<AddShoppingItemName> {
   void _submit(String newShoppingItemName) {
     Collection collection =
         objectbox.collectionBox.get(widget.collectionId) as Collection;
-    collection.shoppingItemsNames.add(newShoppingItemName.toLowerCase());
+    collection.shoppingItemsNames.add(newShoppingItemName.trim().toLowerCase());
 
     objectbox.collectionBox.put(collection);
 

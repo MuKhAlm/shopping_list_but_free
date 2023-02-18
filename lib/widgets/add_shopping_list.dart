@@ -20,13 +20,13 @@ class _AddShoppingListState extends State<AddShoppingList> {
     );
   }
 
+  /// Creates a new **ShoppingList** with the name [newShoppingListName] and puts
+  /// it in obx.
+  ///
+  /// Trims [newShoppingListName] before creating the **ShoppingList**
   void _submit(String newShoppingListName) {
-    String name = 'Untitled';
-    if (newShoppingListName != '') {
-      name = newShoppingListName;
-    }
-
-    objectbox.shoppingListBox.put(ShoppingList(name: name));
+    objectbox.shoppingListBox
+        .put(ShoppingList(name: newShoppingListName.trim()));
     Navigator.of(context).pop();
   }
 }

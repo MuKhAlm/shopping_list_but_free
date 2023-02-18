@@ -30,7 +30,7 @@ class _AddCollectionState extends State<AddCollection> {
   }
 
   void _submit(String collectionName) {
-    final Collection newCollection = Collection(name: collectionName);
+    final Collection newCollection = Collection(name: collectionName.trim());
 
     // Add shoppingItem's name to collection if a shoppingItem is provided
     if (widget.shoppingItem != null) {

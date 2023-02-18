@@ -36,15 +36,9 @@ class _AddShoppingItemState extends State<AddShoppingItem> {
   /// If the **ShoppingItem**'s name is not an a Collection, add the **ShoppingItem**'s name
   /// to the **Others** Collection.
   void _submit(String newShoppingItemName) {
-    final String name;
-    if (newShoppingItemName != '') {
-      name = newShoppingItemName;
-    } else {
-      name = 'Untitled';
-    }
-
     // Create ShoppingItem
-    final ShoppingItem shoppingItem = ShoppingItem(name: name);
+    final ShoppingItem shoppingItem =
+        ShoppingItem(name: newShoppingItemName.trim());
 
     // Add to ShoppingList
     final ShoppingList shoppingList =

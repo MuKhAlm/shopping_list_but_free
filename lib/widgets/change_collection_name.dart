@@ -28,7 +28,7 @@ class _ChangeCollectionNameState extends State<ChangeCollectionName> {
   void _submit(String newCollectionName) {
     final Collection collection =
         objectbox.collectionBox.get(widget.collectionId) as Collection;
-    collection.name = newCollectionName;
+    collection.name = newCollectionName.trim();
     objectbox.collectionBox.put(collection);
     Navigator.of(context).pop();
   }
