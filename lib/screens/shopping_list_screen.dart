@@ -140,6 +140,18 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                           .contains(shoppingItemName)))
                   .toList();
 
+              // Sort relevantCollections (Others at the end if Others is in the ShoppingList)
+              relevantCollections.sort((a, b) {
+                return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+              });
+              if (relevantCollections
+                  .any((collection) => collection.name == 'Others')) {
+                final int othersIndex = relevantCollections
+                    .indexWhere((collection) => collection.name == 'Others');
+                Collection others = relevantCollections.removeAt(othersIndex);
+                relevantCollections.add(others);
+              }
+
               // Only init _collectionsExpansionState if the Collections in
               // relevantCollections and _collectionsExpansionState are different
               List<int> prevRelevantCollectionsIds = _prevRelevantCollections
