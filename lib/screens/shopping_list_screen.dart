@@ -166,6 +166,9 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
 
               return ListView(
                 children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
                   ExpansionPanelList(
                     key: Key('$_count'),
                     expansionCallback: (panelIndex, isExpanded) {

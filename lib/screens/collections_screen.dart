@@ -87,6 +87,9 @@ class _CollectionsScreenState extends State<CollectionsScreen> {
 
           return ListView(
             children: [
+              const SizedBox(
+                height: 10,
+              ),
               ExpansionPanelList(
                 key: Key('$_count'),
                 expansionCallback: (panelIndex, isExpanded) {
