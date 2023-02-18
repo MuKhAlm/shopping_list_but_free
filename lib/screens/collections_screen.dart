@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:shopping_list_but_free/default_icons.dart';
 import 'package:shopping_list_but_free/models/collection.dart';
 import 'package:shopping_list_but_free/models/shopping_item.dart';
 import 'package:shopping_list_but_free/models/shopping_list.dart';
@@ -187,7 +188,7 @@ class _CollectionsScreenState extends State<CollectionsScreen> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: const [
                                   Icon(
-                                    Icons.delete_forever_outlined,
+                                    defaultDeleteIcon,
                                   ),
                                   SizedBox(
                                     width: 10,
@@ -205,26 +206,28 @@ class _CollectionsScreenState extends State<CollectionsScreen> {
                     body: Column(
                       children: collection.shoppingItemsNames
                           .map((String shoppingItemName) {
-                        return ListTile(
-                          title: Text(shoppingItemName),
-                          trailing: IconButton(
-                            tooltip:
-                                'Remove shopping item name from collection',
-                            onPressed: () {
-                              // Delete shoppingItemName from collection and move it to Others
-                              // if there are ShoppingItem with given name
-                              // This is because some ShoppingLists might still
-                              // contain a ShoppingItem with the given name
-                              collection.shoppingItemsNames
-                                  .remove(shoppingItemName);
+                        return Card(
+                          child: ListTile(
+                            title: Text(shoppingItemName),
+                            trailing: IconButton(
+                              tooltip:
+                                  'Remove shopping item name from collection',
+                              onPressed: () {
+                                // Delete shoppingItemName from collection and move it to Others
+                                // if there are ShoppingItem with given name
+                                // This is because some ShoppingLists might still
+                                // contain a ShoppingItem with the given name
+                                collection.shoppingItemsNames
+                                    .remove(shoppingItemName);
 
-                              ShoppingItem;
+                                ShoppingItem;
 
-                              _addToOthers(shoppingItemName);
+                                _addToOthers(shoppingItemName);
 
-                              objectbox.collectionBox.put(collection);
-                            },
-                            icon: const Icon(Icons.delete_forever_outlined),
+                                objectbox.collectionBox.put(collection);
+                              },
+                              icon: const Icon(defaultDeleteIcon),
+                            ),
                           ),
                         );
                       }).toList(),

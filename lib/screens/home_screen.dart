@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_list_but_free/default_icons.dart';
 import 'package:shopping_list_but_free/models/shopping_list.dart';
 import 'package:shopping_list_but_free/objectbox.dart';
 import 'package:shopping_list_but_free/screens/shopping_list_screen.dart';
@@ -64,8 +65,11 @@ class HomeScreen extends StatelessWidget {
                           objectbox.shoppingListBox
                               .remove(snapshot.data![index].id);
                         },
+                        style: ElevatedButton.styleFrom(
+                          shape: const CircleBorder(),
+                        ),
                         icon: const Icon(
-                          Icons.delete_forever_outlined,
+                          defaultDeleteIcon,
                         ),
                       ),
                     ),
