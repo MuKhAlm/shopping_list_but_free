@@ -30,7 +30,23 @@ class _AddCollectionState extends State<AddCollection> {
   }
 
   void _submit(String collectionName) {
-    final Collection newCollection = Collection(name: collectionName.trim());
+    late final Collection newCollection;
+
+    // Whether a Collection with same name exists
+    if (objectbox.collectionBox
+            .query(Collection_.name.equals(collectionName))
+            .build()
+            .findFirst() !=
+        null) {
+      // Assign to the existing Collection
+      newCollection = objectbox.collectionBox
+          .query(Collection_.name.equals(collectionName))
+          .build()
+          .findFirst() as Collection;
+    } else {
+      // Create a new Collection
+      newCollection = Collection(name: collectionName.trim());
+    }
 
     // Add shoppingItem's name to collection if a shoppingItem is provided
     if (widget.shoppingItem != null) {
