@@ -298,9 +298,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                                     .map(
                                       (ShoppingItem shoppingItem) =>
                                           Dismissible(
-                                        key: ValueKey(shoppingList.shoppingItems
-                                            .indexWhere((si) =>
-                                                si.id == shoppingItem.id)),
+                                        key: ValueKey(shoppingItem.id),
                                         background: Container(
                                           color: Colors.red,
                                           child: Padding(
