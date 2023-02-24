@@ -35,32 +35,30 @@ class _ExportShoppingListState extends State<ExportShoppingList> {
               child: Card(
                 elevation: 20,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Row(
-                      children: [
-                        BackButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                        ),
-                      ],
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.all(20),
-                      child: Align(
-                        alignment: Alignment.center,
+                    const Expanded(
+                      flex: 0,
+                      child: Padding(
+                        padding: EdgeInsets.all(20),
                         child: Text(
                           'Send the shopping list code for others to import it',
-                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w600,
                           ),
+                          textAlign: TextAlign.center,
                         ),
                       ),
                     ),
-                    ElevatedButton.icon(
-                      onPressed: () {},
-                      icon: const Icon(Icons.copy),
-                      label: const Text('Shopping list code'),
+                    Expanded(
+                      child: Center(
+                        child: ElevatedButton.icon(
+                          onPressed: () {},
+                          icon: const Icon(Icons.copy),
+                          label: const Text('Shopping list code'),
+                        ),
+                      ),
                     ),
                   ],
                 ),
