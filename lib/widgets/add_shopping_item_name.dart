@@ -35,6 +35,16 @@ class _AddShoppingItemNameState extends State<AddShoppingItemName> {
       return;
     }
 
+    // Remove items with same name from other Collections
+    for (Collection collection in objectbox.collectionBox.getAll()) {
+      if (collection.shoppingItemsNames
+          .contains(newShoppingItemName.trim().toLowerCase())) {
+        collection.shoppingItemsNames
+            .remove(newShoppingItemName.trim().toLowerCase());
+        objectbox.collectionBox.put(collection);
+      }
+    }
+
     collection.shoppingItemsNames.add(newShoppingItemName.trim().toLowerCase());
 
     objectbox.collectionBox.put(collection);
