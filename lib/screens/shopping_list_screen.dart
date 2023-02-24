@@ -72,6 +72,16 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
             },
             itemBuilder: (context) => [
               PopupMenuItem(
+                value: 'export',
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: const [
+                    Icon(Icons.upload_outlined),
+                    Text('Export'),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
                 value: 'delete',
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
