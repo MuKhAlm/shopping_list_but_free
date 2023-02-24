@@ -42,7 +42,7 @@ class _ExportShoppingListState extends State<ExportShoppingList> {
                       child: Padding(
                         padding: EdgeInsets.all(20),
                         child: Text(
-                          'Send the shopping list code for others to import it',
+                          'Share the shopping list code for others to import it',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w600,
