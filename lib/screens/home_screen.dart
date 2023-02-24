@@ -4,6 +4,7 @@ import 'package:shopping_list_but_free/models/shopping_list.dart';
 import 'package:shopping_list_but_free/objectbox.dart';
 import 'package:shopping_list_but_free/screens/shopping_list_screen.dart';
 import 'package:shopping_list_but_free/widgets/add_shopping_list.dart';
+import 'package:shopping_list_but_free/widgets/import_shopping_list.dart';
 import 'package:shopping_list_but_free/widgets/main_navigation_drawer.dart';
 
 /// A widget that displays the home screen
@@ -21,6 +22,19 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Shopping List But Free'),
+        actions: [
+          IconButton(
+            tooltip: 'Import',
+            onPressed: () {
+              Navigator.of(context).push(
+                PageRouteBuilder(
+                    opaque: false,
+                    pageBuilder: (_, __, ___) => const ImportShoppingList()),
+              );
+            },
+            icon: const Icon(Icons.download_outlined),
+          )
+        ],
       ),
       drawer: const MainNavigationDrawer(),
       floatingActionButton: FloatingActionButton(
