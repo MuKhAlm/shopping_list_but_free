@@ -1,22 +1,19 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shopping_list_but_free/models/shopping_list.dart';
 
 /// Displays a card that lets the user copy the Json encoding of
 /// [shoppingList]
-class ExportShoppingList extends StatefulWidget {
+class ExportShoppingList extends StatelessWidget {
   final ShoppingList shoppingList;
   const ExportShoppingList({
     required this.shoppingList,
     Key? key,
   }) : super(key: key);
 
-  @override
-  State<ExportShoppingList> createState() => _ExportShoppingListState();
-}
-
-class _ExportShoppingListState extends State<ExportShoppingList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +51,19 @@ class _ExportShoppingListState extends State<ExportShoppingList> {
                     Expanded(
                       child: Center(
                         child: ElevatedButton.icon(
-                          onPressed: () {},
+                          onPressed: () async {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                    'Copied shopping list code to clipboard'),
+                              ),
+                            );
+
+                            await Clipboard.setData(
+                              ClipboardData(
+                                  text: json.encode(shoppingList.toJson())),
+                            );
+                          },
                           icon: const Icon(Icons.copy),
                           label: const Text('Shopping list code'),
                         ),

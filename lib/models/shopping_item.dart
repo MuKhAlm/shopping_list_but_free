@@ -24,4 +24,10 @@ class ShoppingItem {
     this.quantity = 1,
     this.id = 0,
   });
+
+  Map toJson() => {
+        'name': name,
+        'checked': checked,
+        'quantity': quantity,
+      };
 }

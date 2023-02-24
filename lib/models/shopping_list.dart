@@ -18,4 +18,9 @@ class ShoppingList {
     required this.name,
     this.id = 0,
   });
+
+  Map toJson() => {
+        'name': name,
+        'shoppingItems': shoppingItems.map((si) => si.toJson()).toList(),
+      };
 }
