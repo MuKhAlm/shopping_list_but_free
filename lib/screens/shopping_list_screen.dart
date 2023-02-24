@@ -269,25 +269,26 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                                     }
                                   },
                                   itemBuilder: (context) => [
-                                    PopupMenuItem(
-                                      value: 'change name',
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: const [
-                                          Icon(
-                                            Icons.edit,
-                                          ),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          Text(
-                                            'Change\nName',
-                                            softWrap: true,
-                                          ),
-                                        ],
+                                    if (collection.name != 'Others')
+                                      PopupMenuItem(
+                                        value: 'change name',
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: const [
+                                            Icon(
+                                              Icons.edit,
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text(
+                                              'Change\nName',
+                                              softWrap: true,
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
                                     PopupMenuItem(
                                       value: 'delete',
                                       child: Row(
