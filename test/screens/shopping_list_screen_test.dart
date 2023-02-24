@@ -121,6 +121,16 @@ void main() async {
               );
 
               testWidgets(
+                'Displays Export option',
+                (tester) async {
+                  await popUpMenuSetup(tester);
+
+                  // Test for Export option
+                  expect(find.text('Export'), findsOneWidget);
+                },
+              );
+
+              testWidgets(
                 'Tapping on popup menu displays delete option',
                 (tester) async {
                   await popUpMenuSetup(tester);
