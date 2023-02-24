@@ -9,6 +9,7 @@ import 'package:shopping_list_but_free/objectbox.g.dart';
 import 'package:shopping_list_but_free/widgets/add_shopping_item.dart';
 import 'package:shopping_list_but_free/widgets/change_collection.dart';
 import 'package:shopping_list_but_free/widgets/change_collection_name.dart';
+import 'package:shopping_list_but_free/widgets/export_shopping_list.dart';
 import 'package:shopping_list_but_free/widgets/main_navigation_drawer.dart';
 
 class ShoppingListScreen extends StatefulWidget {
@@ -57,6 +58,16 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
             onSelected: (value) {
               ShoppingList shoppingList = objectbox.shoppingListBox
                   .get(widget.shoppingListId) as ShoppingList;
+              if (value == 'export') {
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                    opaque: false,
+                    pageBuilder: (_, __, ___) => ExportShoppingList(
+                      shoppingList: shoppingList,
+                    ),
+                  ),
+                );
+              }
               if (value == 'delete') {
                 // Pop route
                 Navigator.of(context).pop();
