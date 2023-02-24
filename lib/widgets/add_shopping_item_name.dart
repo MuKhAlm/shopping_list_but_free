@@ -27,6 +27,14 @@ class _AddShoppingItemNameState extends State<AddShoppingItemName> {
   void _submit(String newShoppingItemName) {
     Collection collection =
         objectbox.collectionBox.get(widget.collectionId) as Collection;
+
+    // Ignore if newShoppingItemName is already in collection
+    if (collection.shoppingItemsNames
+        .contains(newShoppingItemName.trim().toLowerCase())) {
+      Navigator.of(context).pop();
+      return;
+    }
+
     collection.shoppingItemsNames.add(newShoppingItemName.trim().toLowerCase());
 
     objectbox.collectionBox.put(collection);
