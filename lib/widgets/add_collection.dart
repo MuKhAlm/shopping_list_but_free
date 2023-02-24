@@ -72,6 +72,12 @@ class _AddCollectionState extends State<AddCollection> {
     // Add newCollection to obx
     objectbox.collectionBox.put(newCollection);
 
+    // Show warning SnackBar if the added Collection is Others
+    if (newCollection.name == 'Others') {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Cannot use the name "Others" for a new collection')));
+    }
+
     // Pop Widget
     Navigator.of(context).pop();
   }
