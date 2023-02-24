@@ -36,6 +36,23 @@ class _AddShoppingItemState extends State<AddShoppingItem> {
   /// If the **ShoppingItem**'s name is not an a Collection, add the **ShoppingItem**'s name
   /// to the **Others** Collection.
   void _submit(String newShoppingItemName) {
+    // Abort if a ShoppingItem with same name (case sensitive) exists in the
+    // ShoppingList with shoppingListId
+    if (objectbox.shoppingListBox
+        .get(widget.shoppingListId)!
+        .shoppingItems
+        .map((si) => si.name)
+        .contains(newShoppingItemName.trim())) {
+      // SnackBar
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('A shopping item with given name already exists')));
+
+      // Pop Widget
+      Navigator.of(context).pop();
+
+      return;
+    }
+
     // Create ShoppingItem
     final ShoppingItem shoppingItem =
         ShoppingItem(name: newShoppingItemName.trim());
