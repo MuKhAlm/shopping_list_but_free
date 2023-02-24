@@ -23,7 +23,7 @@ void main() async {
     }
   }
 
-  Widget getAddShoppingList(void Function(String) onSubmit) => MaterialApp(
+  Widget getAddEntity(void Function(String) onSubmit) => MaterialApp(
         theme: ThemeData(
           useMaterial3: true,
         ),
@@ -45,7 +45,7 @@ void main() async {
           // Setup
           dbSetUp();
 
-          await tester.pumpWidget(getAddShoppingList((value) {}));
+          await tester.pumpWidget(getAddEntity((value) {}));
           await tester.pumpAndSettle();
 
           // Test for AddShoppingList
@@ -66,7 +66,7 @@ void main() async {
           // Setup
           dbSetUp(() {});
 
-          await tester.pumpWidget(getAddShoppingList((value) {}));
+          await tester.pumpWidget(getAddEntity((value) {}));
           await tester.pumpAndSettle();
 
           // Test for TextFormField
@@ -80,7 +80,7 @@ void main() async {
           // Setup
           dbSetUp(() {});
 
-          await tester.pumpWidget(getAddShoppingList((value) {}));
+          await tester.pumpWidget(getAddEntity((value) {}));
           await tester.pumpAndSettle();
 
           // Test for submit button
@@ -99,7 +99,7 @@ void main() async {
           // Setup
           dbSetUp(() {});
 
-          await tester.pumpWidget(getAddShoppingList(onSubmit));
+          await tester.pumpWidget(getAddEntity(onSubmit));
           await tester.pumpAndSettle();
 
           // Test for onSubmit invoke
