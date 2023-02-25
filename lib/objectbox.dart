@@ -23,44 +23,26 @@ class ObjectBox {
     shoppingItemBox = Box<ShoppingItem>(_store);
     collectionBox = Box<Collection>(_store);
 
-    _addMockData();
-    _addOthersCollection();
+    _addOthersCollectionAndInitCollections();
   }
 
-  void _addOthersCollection() {
+  void _addOthersCollectionAndInitCollections() {
     if (collectionBox
             .query(Collection_.name.equals('Others'))
             .build()
             .count() ==
         0) {
       collectionBox.put(Collection(name: 'Others'));
-    }
-  }
 
-  void _addMockData() {
-    // Empty collections
-    shoppingItemBox.removeAll();
-    shoppingListBox.removeAll();
-    collectionBox.removeAll();
-    if (collectionBox.isEmpty()) {
-      Collection collection1 = Collection(name: 'Collection 1');
-      collection1.shoppingItemsNames.add('shopping item 1');
-      Collection collection2 = Collection(name: 'Collection 2');
-      collection2.shoppingItemsNames.add('shopping item 2');
-
-      collectionBox.put(collection1);
-      collectionBox.put(collection2);
-      collectionBox.put(Collection(name: 'Collection 3'));
-    }
-
-    if (shoppingListBox.isEmpty()) {
-      ShoppingList shoppingList = ShoppingList(name: 'Shopping List 1');
-      shoppingList.shoppingItems.add(ShoppingItem(name: 'Shopping Item 1'));
-      shoppingList.shoppingItems.add(ShoppingItem(name: 'Shopping Item 2'));
-
-      shoppingListBox.put(shoppingList);
-      shoppingListBox.put(ShoppingList(name: 'Shopping List 2'));
-      shoppingListBox.put(ShoppingList(name: 'Shopping List 3'));
+      // Common Collections
+      collectionBox.put(Collection(name: 'Fruits & Vegetables'));
+      collectionBox.put(Collection(name: 'Dairy'));
+      collectionBox.put(Collection(name: 'Bakery'));
+      collectionBox.put(Collection(name: 'Meats'));
+      collectionBox.put(Collection(name: 'Household'));
+      collectionBox.put(Collection(name: 'Frozen'));
+      collectionBox.put(Collection(name: 'Snacks'));
+      collectionBox.put(Collection(name: 'Drinks'));
     }
   }
 
